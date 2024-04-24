@@ -1,0 +1,7 @@
+{
+  "name": "currency-exchange",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
