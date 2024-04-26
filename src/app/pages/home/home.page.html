@@ -1,0 +1,18 @@
+<ion-content [fullscreen]="true">
+  <header class="flex justify-between items-center px-4 py-2">
+    <h1 class="font-bold text-2xl w-full">Currency Tracker</h1>
+
+    <ion-select
+      label="Base currency"
+      placeholder="Base"
+      value="USD"
+      interface="popover"
+      label-placement="stacked"
+      class="w-fit"
+    >
+      @for (item of api.codes()?.supported_codes; track item[0]) {
+      <ion-select-option [value]="item[0]">{{item[0]}}</ion-select-option>
+      }
+    </ion-select>
+  </header>
+</ion-content>

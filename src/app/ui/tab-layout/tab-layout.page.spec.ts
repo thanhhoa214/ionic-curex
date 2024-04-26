@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { TabsPage } from './tabs.page';
+import { TabsPage } from './tab-layout.page';
 
 describe('TabsPage', () => {
   let component: TabsPage;
@@ -10,8 +10,8 @@ describe('TabsPage', () => {
   beforeEach(async () => {
     TestBed.overrideComponent(TabsPage, {
       add: {
-        imports: [RouterTestingModule]
-      }
+        imports: [RouterTestingModule],
+      },
     });
   });
 

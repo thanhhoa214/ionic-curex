@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Settings </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list-header>
+    <h2>Main Setting</h2>
+  </ion-list-header>
+  <ion-list [inset]="true" class="border border-gray-200">
+    <ion-item>
+      <ion-select
+        #base
+        label="Base currency"
+        value="system"
+        value="USD"
+        [selectedText]="base.value"
+      >
+        @for (item of api.codes()?.supported_codes; track item[0]) {
+        <ion-select-option [value]="item[0]"
+          ><strong>{{item[0]}}</strong> ({{item[1]}})</ion-select-option
+        >
+        }
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Appearance" value="system">
+        <ion-select-option value="system">System</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+        <ion-select-option value="light">Light</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-toggle>Notification</ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <ion-list-header>
+    <h2>Support</h2>
+  </ion-list-header>
+  <ion-list [inset]="true" class="border border-gray-200">
+    <ion-item>
+      <ion-icon name="call-outline" size="small" class="mr-2" />
+      <ion-label> Contact for support</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="star-half-outline" size="small" class="mr-2" />
+      <ion-label>Rate us</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="shield-checkmark-outline" size="small" class="mr-2" />
+      <ion-label>Privacy policy</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
