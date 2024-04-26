@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  --ion-item-background: var(--ion-color-secondary-contrast);
+}
+
+h2 {
+  @apply text-sm uppercase ml-4;
+}

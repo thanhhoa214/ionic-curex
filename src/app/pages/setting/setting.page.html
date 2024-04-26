@@ -23,7 +23,7 @@
         value="USD"
         [selectedText]="base.value"
       >
-        @for (item of api.codes()?.supported_codes; track item[0]) {
+        @for (item of codes(); track item[0]) {
         <ion-select-option [value]="item[0]"
           ><strong>{{item[0]}}</strong> ({{item[1]}})</ion-select-option
         >

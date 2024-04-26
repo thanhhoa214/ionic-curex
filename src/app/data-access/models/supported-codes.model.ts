@@ -1,4 +1,4 @@
-import { StandardResponse } from './StandardResponse.model';
+import { StandardResponse } from './standard-response.model';
 
 export interface SupportedCodesResponse extends StandardResponse {
   documentation: string;

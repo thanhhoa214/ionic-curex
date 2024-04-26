@@ -30,6 +30,8 @@
     "@capacitor/status-bar": "6.0.0",
     "@ionic/angular": "^8.0.0",
     "@ionic/storage-angular": "^4.0.0",
+    "@ngxs/storage-plugin": "^3.8.2",
+    "@ngxs/store": "^3.8.2",
     "ionicons": "^7.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

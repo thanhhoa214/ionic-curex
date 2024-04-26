@@ -1,18 +1,83 @@
 <ion-content [fullscreen]="true">
-  <header class="flex justify-between items-center px-4 py-2">
-    <h1 class="font-bold text-2xl w-full">Currency Tracker</h1>
+  <h1 class="text-2xl font-bold p-4">Currency Exchange</h1>
 
-    <ion-select
-      label="Base currency"
-      placeholder="Base"
-      value="USD"
-      interface="popover"
-      label-placement="stacked"
-      class="w-fit"
-    >
-      @for (item of api.codes()?.supported_codes; track item[0]) {
-      <ion-select-option [value]="item[0]">{{item[0]}}</ion-select-option>
-      }
-    </ion-select>
-  </header>
+  <ion-list-header>
+    <h2>Favorites</h2>
+  </ion-list-header>
+  <ion-list [inset]="true" class="border border-gray-200">
+    @for (item of favorites(); track item.code) {
+    <ion-item-sliding>
+      <ion-item href="/{{item.code}}" [button]="true">
+        <ion-label>
+          <strong>{{item.code}}/{{base()}}</strong>
+          <p>{{item.name}}</p>
+        </ion-label>
+        <ion-text>{{item.rate}}</ion-text>
+      </ion-item>
+      <ion-item-options slot="end">
+        <ion-item-option
+          color="danger"
+          expandable="true"
+          (click)="removeFavorite(item.code)"
+        >
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    } @empty {
+    <ion-item>
+      <div class="w-full p-4 text-center">
+        <ion-icon name="color-wand-outline" size="large" />
+        <p>Quickly check favorites pairs here</p>
+
+        <ion-button (click)="select.open()">
+          <ion-icon name="add-circle-outline" class="mr-1" /> Add pairs
+        </ion-button>
+
+        <ion-select
+          #select
+          label="Base currency"
+          [value]="favorites()"
+          (ionChange)="setFavorites($event.detail.value)"
+          [interfaceOptions]="customAlertOptions"
+          multiple
+          class="hidden"
+        >
+          @for (item of codes(); track item[0]) {
+          <ion-select-option [value]="item[0]">
+            <strong>{{item[0]}}</strong> ({{item[1]}})
+          </ion-select-option>
+          }
+        </ion-select>
+      </div>
+    </ion-item>
+    }
+  </ion-list>
+
+  <ion-list-header>
+    <h2>All currencies</h2>
+  </ion-list-header>
+
+  <ion-list [inset]="true" class="border border-gray-200">
+    @for (item of codesWithRate()?.slice(0, 10); track item.code) {
+    <ion-item>
+      <ion-label>
+        <strong>{{item.code}}/{{base()}}</strong>
+        <p>{{item.name}}</p>
+      </ion-label>
+      <ion-text slot="end">{{item.rate}}</ion-text>
+    </ion-item>
+    } @empty {
+    <ion-item>
+      <div class="w-full p-4 text-center">
+        <ion-icon name="refresh-outline" size="large" />
+        <p>Loading...</p>
+      </div>
+    </ion-item>
+    }
+    <!--  -->
+    @if (codesWithRate(); as codes) { @if (codes.length > 10) {
+    <ion-button fill="clear" class="w-full">View all</ion-button>
+    } }
+  </ion-list>
 </ion-content>

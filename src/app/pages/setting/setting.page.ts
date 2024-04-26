@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   IonContent,
   IonHeader,
@@ -14,6 +15,7 @@ import {
   IonSelectOption,
   IonIcon,
 } from '@ionic/angular/standalone';
+import { Store } from '@ngxs/store';
 import { addIcons } from 'ionicons';
 import {
   callOutline,
@@ -21,6 +23,7 @@ import {
   starHalfOutline,
 } from 'ionicons/icons';
 import { ExchangeRateApiService } from 'src/app/data-access/services/exrate-api.service';
+import { CoreState } from 'src/app/data-access/store/core.state';
 
 @Component({
   selector: 'app-setting-page',
@@ -45,7 +48,7 @@ import { ExchangeRateApiService } from 'src/app/data-access/services/exrate-api.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingPage {
-  api = inject(ExchangeRateApiService);
+  codes = toSignal(inject(Store).select(CoreState.codes));
 
   constructor() {
     addIcons({ callOutline, starHalfOutline, shieldCheckmarkOutline });
