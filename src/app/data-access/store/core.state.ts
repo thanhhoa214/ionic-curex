@@ -11,7 +11,6 @@ import {
 } from './core.actions';
 import { ExchangeRateApiService } from '../services/exrate-api.service';
 import { tap } from 'rxjs';
-import { ConversionRates } from '../models/conversion-rates.model';
 import {
   CurrencyInformationService,
   MidMarketRatesService,
@@ -38,7 +37,6 @@ const initState: CoreStateModel = {
 })
 @Injectable()
 export class CoreState implements NgxsOnInit {
-  private apiService = inject(ExchangeRateApiService);
   private xeCurrencyApi = inject(CurrencyInformationService);
   private xeMideMarketRateApi = inject(MidMarketRatesService);
 
@@ -60,9 +58,13 @@ export class CoreState implements NgxsOnInit {
     });
   }
   @Selector() static favorites(state: CoreStateModel) {
-    return this.codesWithRate(state)?.filter((code) =>
-      state.favorites.includes(code?.code ?? '')
-    );
+    return state.favorites
+      .map((f) => this.codesWithRate(state)?.find((c) => c.code === f))
+      .filter((predicate) => predicate !== undefined) as {
+      code: string;
+      name: string;
+      rate: number;
+    }[];
   }
   @Selector() static base(state: CoreStateModel) {
     return state.base;

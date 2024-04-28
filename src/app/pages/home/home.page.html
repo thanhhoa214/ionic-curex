@@ -1,66 +1,74 @@
 <ion-content [fullscreen]="true">
   <h1 class="text-2xl font-bold p-4">Currency Exchange</h1>
 
-  <ion-list-header>
-    <h2>Favorites</h2>
-  </ion-list-header>
-  <ion-list [inset]="true" class="border border-gray-200">
-    @for (item of favorites(); track item.code) {
-    <ion-item-sliding>
-      <ion-item href="/{{item.code}}" [button]="true">
-        <ion-label>
-          <strong>{{base()}}/{{item.code}}</strong>
-          <p>{{item.name}}</p>
-        </ion-label>
-        <ion-text>{{item.rate}}</ion-text>
-      </ion-item>
-      <ion-item-options slot="end">
-        <ion-item-option
-          color="danger"
-          expandable="true"
-          (click)="removeFavorite(item.code)"
-        >
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-    } @empty {
-    <ion-item>
-      <div class="w-full p-4 text-center">
-        <ion-icon name="color-wand-outline" size="large" />
-        <p>Quickly check favorites pairs here</p>
-
-        <ion-button (click)="select.open()">
-          <ion-icon name="add-circle-outline" class="mr-1" /> Add pairs
-        </ion-button>
-
-        <ion-select
-          #select
-          label="Base currency"
-          [value]="favorites()"
-          (ionChange)="setFavorites($event.detail.value)"
-          [interfaceOptions]="customAlertOptions"
-          multiple
-          class="hidden"
-        >
-          @for (item of codes(); track item.iso) {
-          <ion-select-option [value]="item.iso">
-            <strong>{{item.iso}}</strong> ({{item.currency_name}})
-          </ion-select-option>
+  <header class="flex justify-between items-center px-4 font-bold">
+    <h2 class="tracking-wide">Favorites</h2>
+    <ion-button
+      fill="clear"
+      size="small"
+      (click)="toggleEdit()"
+      class="m-0 py-1 px-2"
+    >
+      {{inEditFavorites() ? 'Done':'Edit'}}
+    </ion-button>
+  </header>
+  <ion-list
+    [inset]="true"
+    class="border border-ion-background-color-step-200 !mt-0.5"
+  >
+    <ion-reorder-group
+      [disabled]="false"
+      (ionItemReorder)="handleReorder($event)"
+    >
+      @for (item of favorites(); track item.code) {
+      <ion-item-sliding>
+        <ion-item button [detail]="false" (click)="selectedCode.set(item.code)">
+          @if (inEditFavorites()) {
+          <ion-reorder class="mr-1">
+            <ion-icon name="chevron-expand-outline" size="large" />
+          </ion-reorder>
           }
-        </ion-select>
-      </div>
-    </ion-item>
-    }
+          <ion-label>
+            <strong>{{base()}}/{{item.code}}</strong>
+            <p>{{item.name}}</p>
+          </ion-label>
+          <ion-text>{{item.rate}}</ion-text>
+        </ion-item>
+        <ion-item-options slot="end">
+          <ion-item-option
+            color="danger"
+            expandable="true"
+            (click)="removeFavorite(item.code)"
+          >
+            <ion-icon slot="icon-only" name="trash-outline" />
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+      } @empty {
+      <ion-item>
+        <div class="w-full p-4 text-center">
+          <ion-icon name="color-wand-outline" size="large" />
+          <p>Quickly check favorites pairs here</p>
+
+          <ion-button (click)="showAddFavoriteSheet.set(true)">
+            <ion-icon name="add-circle-outline" class="mr-1" /> Add pairs
+          </ion-button>
+        </div>
+      </ion-item>
+      }
+    </ion-reorder-group>
   </ion-list>
 
-  <ion-list-header>
-    <h2>All currencies</h2>
-  </ion-list-header>
+  <header class="flex justify-between items-center px-4 font-bold">
+    <h2 class="tracking-wide">All currencies</h2>
+  </header>
 
-  <ion-list [inset]="true" class="border border-gray-200">
+  <ion-list
+    [inset]="true"
+    class="border border-ion-background-color-step-200 !mt-2"
+  >
     @for (item of codesWithRate()?.slice(0, 10); track item.code) {
-    <ion-item button>
+    <ion-item button [detail]="false" (click)="selectedCode.set(item.code)">
       <ion-label>
         <strong>{{base()}}/{{item.code}}</strong>
         <p>{{item.name}}</p>
@@ -81,3 +89,27 @@
     } }
   </ion-list>
 </ion-content>
+
+<ion-modal
+  [isOpen]="showAddFavoriteSheet()"
+  [initialBreakpoint]="0.75"
+  [breakpoints]="[0, 0.75, 1]"
+  (ionModalDidDismiss)="showAddFavoriteSheet.set(false)"
+>
+  <ng-template>
+    <app-currency-list-sheet />
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  [isOpen]="!!selectedCode()"
+  [initialBreakpoint]="0.75"
+  [breakpoints]="[0, 0.75, 1]"
+  (ionModalDidDismiss)="selectedCode.set(null)"
+>
+  <ng-template>
+    @if (selectedCode(); as selectedCode) {
+    <app-currency-detail-sheet [counter]="selectedCode" />
+    }
+  </ng-template>
+</ion-modal>

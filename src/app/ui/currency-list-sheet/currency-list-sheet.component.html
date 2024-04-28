@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add favorite pairs</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [value]="search()"
+      (ionInput)="search.set($event.detail.value || '')"
+    />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="overflow-scroll">
+  <ion-list [inset]="true">
+    @for (item of filteredCodes(); track item.iso) {
+    <ion-item>
+      <ion-checkbox
+        [value]="item.iso"
+        [checked]="favorites()?.includes(item.iso)"
+        (ionChange)="checkboxChange($event.detail)"
+        >{{ item.currency_name }}</ion-checkbox
+      >
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>
