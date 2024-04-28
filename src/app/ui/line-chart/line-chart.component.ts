@@ -1,8 +1,9 @@
 import { Component, computed, input } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
-import * as Highcharts from 'highcharts';
-import initStock from 'highcharts/modules/stock';
-import initA11y from 'highcharts/modules/accessibility';
+// @ts-ignore
+import Highcharts from 'highcharts/highcharts.src';
+import initStock from 'highcharts/modules/stock.src';
+import initA11y from 'highcharts/modules/accessibility.src';
 import {
   GetChartOptionsParams,
   getChartOptions,
@@ -21,7 +22,7 @@ if (typeof Highcharts === 'object') {
   imports: [HighchartsChartModule],
 })
 export class LineChartComponent {
-  readonly Highcharts: typeof Highcharts = Highcharts;
+  readonly Highcharts = Highcharts;
 
   params = input<GetChartOptionsParams>();
 
