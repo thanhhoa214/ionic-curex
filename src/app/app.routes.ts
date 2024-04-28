@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { TabLayoutComponent } from './ui/tab-layout/tab-layout.page';
+import { TabLayoutComponent } from './ui/tab-layout/tab-layout.component';
 
 export const routes: Routes = [
   {
@@ -13,8 +13,18 @@ export const routes: Routes = [
       },
       {
         path: 'chart',
-        loadComponent: () =>
-          import('./pages/chart/chart.page').then((m) => m.ChartPage),
+        children: [
+          {
+            path: ':counter',
+            loadComponent: () =>
+              import('./pages/chart/chart.page').then((m) => m.ChartPage),
+          },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'EUR',
+          },
+        ],
       },
       {
         path: 'tool',

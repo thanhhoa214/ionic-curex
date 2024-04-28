@@ -9,7 +9,7 @@
     <ion-item-sliding>
       <ion-item href="/{{item.code}}" [button]="true">
         <ion-label>
-          <strong>{{item.code}}/{{base()}}</strong>
+          <strong>{{base()}}/{{item.code}}</strong>
           <p>{{item.name}}</p>
         </ion-label>
         <ion-text>{{item.rate}}</ion-text>
@@ -43,9 +43,9 @@
           multiple
           class="hidden"
         >
-          @for (item of codes(); track item[0]) {
-          <ion-select-option [value]="item[0]">
-            <strong>{{item[0]}}</strong> ({{item[1]}})
+          @for (item of codes(); track item.iso) {
+          <ion-select-option [value]="item.iso">
+            <strong>{{item.iso}}</strong> ({{item.currency_name}})
           </ion-select-option>
           }
         </ion-select>
@@ -60,9 +60,9 @@
 
   <ion-list [inset]="true" class="border border-gray-200">
     @for (item of codesWithRate()?.slice(0, 10); track item.code) {
-    <ion-item>
+    <ion-item button>
       <ion-label>
-        <strong>{{item.code}}/{{base()}}</strong>
+        <strong>{{base()}}/{{item.code}}</strong>
         <p>{{item.name}}</p>
       </ion-label>
       <ion-text slot="end">{{item.rate}}</ion-text>

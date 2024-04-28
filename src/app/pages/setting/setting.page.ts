@@ -23,7 +23,7 @@ import {
   starHalfOutline,
 } from 'ionicons/icons';
 import { ExchangeRateApiService } from 'src/app/data-access/services/exrate-api.service';
-import { CoreState } from 'src/app/data-access/store/core.state';
+import { CoreState, SetBaseCurrency } from 'src/app/data-access/store';
 
 @Component({
   selector: 'app-setting-page',
@@ -48,9 +48,15 @@ import { CoreState } from 'src/app/data-access/store/core.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingPage {
-  codes = toSignal(inject(Store).select(CoreState.codes));
+  private store = inject(Store);
+  codes = toSignal(this.store.select(CoreState.codes));
+  base = toSignal(this.store.select(CoreState.base));
 
   constructor() {
     addIcons({ callOutline, starHalfOutline, shieldCheckmarkOutline });
+  }
+
+  setBaseCurrency(code: string) {
+    this.store.dispatch(new SetBaseCurrency(code));
   }
 }

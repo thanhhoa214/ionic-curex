@@ -9,7 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "api-gen": "ng-openapi-gen --input https://xecdapi.xe.com/docs/v1/swagger.json --output src/app/data-access/generated"
   },
   "private": true,
   "dependencies": {
@@ -30,9 +31,16 @@
     "@capacitor/status-bar": "6.0.0",
     "@ionic/angular": "^8.0.0",
     "@ionic/storage-angular": "^4.0.0",
+    "@ngxs/logger-plugin": "^3.8.2",
     "@ngxs/storage-plugin": "^3.8.2",
     "@ngxs/store": "^3.8.2",
+    "chart.js": "^4.4.2",
+    "date-fns": "^3.6.0",
+    "highcharts": "^11.4.1",
+    "highcharts-angular": "^4.0.0",
+    "ion2-calendar": "^3.5.0",
     "ionicons": "^7.2.1",
+    "ng-openapi-gen": "^0.51.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
@@ -49,6 +57,7 @@
     "@angular/language-service": "^17.0.2",
     "@capacitor/cli": "6.0.0",
     "@ionic/angular-toolkit": "^11.0.1",
+    "@types/date-fns": "^2.6.0",
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

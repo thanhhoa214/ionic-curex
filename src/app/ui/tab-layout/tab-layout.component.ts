@@ -11,8 +11,8 @@ import { calculator, home, settings, statsChart } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tab-layout',
-  templateUrl: 'tab-layout.page.html',
-  styleUrls: ['tab-layout.page.scss'],
+  templateUrl: 'tab-layout.component.html',
+  styleUrls: ['tab-layout.component.scss'],
   standalone: true,
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })

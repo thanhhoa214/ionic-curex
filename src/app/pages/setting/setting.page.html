@@ -17,15 +17,16 @@
   <ion-list [inset]="true" class="border border-gray-200">
     <ion-item>
       <ion-select
-        #base
+        #baseSelect
         label="Base currency"
-        value="system"
-        value="USD"
-        [selectedText]="base.value"
+        [value]="base()"
+        [selectedText]="baseSelect.value"
+        (ionChange)="setBaseCurrency(baseSelect.value)"
       >
-        @for (item of codes(); track item[0]) {
-        <ion-select-option [value]="item[0]"
-          ><strong>{{item[0]}}</strong> ({{item[1]}})</ion-select-option
+        @for (item of codes(); track item.iso) {
+        <ion-select-option [value]="item.iso"
+          ><strong>{{item.iso}}</strong>
+          ({{item.currency_name}})</ion-select-option
         >
         }
       </ion-select>

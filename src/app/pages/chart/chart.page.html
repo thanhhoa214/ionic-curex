@@ -1,13 +1,75 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Tab 2 </ion-title>
+    <ion-title>{{base()}}/{{counter()}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
+      <ion-title size="large">{{base()}}/{{counter()}}</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <app-line-chart [params]="chartParams()" class="block max-w-xl" />
+
+  <ion-segment
+    #dayFilter
+    (ionChange)="dayFilterChanged($event)"
+    value="7"
+    class="w-fit mx-auto"
+  >
+    <ion-segment-button value="7">
+      <ion-label>7D</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="30">
+      <ion-label>30D</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="90">
+      <ion-label>90D</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="custom">
+      <ion-label>Custom</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  @if (dayFilter.value === 'custom') {
+  <div class="mt-2 flex justify-center items-center gap-3">
+    <ion-datetime-button datetime="start-date" />
+    to
+    <ion-datetime-button datetime="end-date" />
+  </div>
+  }
 </ion-content>
+
+<ion-modal
+  [keepContentsMounted]="true"
+  [initialBreakpoint]="1"
+  [breakpoints]="[0, 1]"
+>
+  <ng-template>
+    <ion-datetime
+      presentation="date"
+      id="start-date"
+      [showDefaultButtons]="true"
+      [max]="startEndDates()[1]"
+      (ionChange)="setCustomDate('start', $event.detail.value)"
+    />
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  [keepContentsMounted]="true"
+  [initialBreakpoint]="1"
+  [breakpoints]="[0, 1]"
+>
+  <ng-template>
+    <ion-datetime
+      presentation="date"
+      id="end-date"
+      [showDefaultButtons]="true"
+      [max]="tomorrow"
+      (ionChange)="setCustomDate('end', $event.detail.value)"
+    />
+  </ng-template>
+</ion-modal>

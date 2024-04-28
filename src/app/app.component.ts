@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { interval, startWith } from 'rxjs';
-import { FetchRates } from './data-access/store/core.actions';
+import { FetchRates, ResetState } from './data-access/store/core.actions';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   private store = inject(Store);
 
   ngOnInit(): void {
-    interval(30 * 1000)
+    interval(5 * 60 * 1000)
       .pipe(startWith(0))
       .subscribe((i) => {
         // this.store.dispatch(new FetchRates());

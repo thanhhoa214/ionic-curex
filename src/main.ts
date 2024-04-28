@@ -1,6 +1,10 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { RouteReuseStrategy, provideRouter } from '@angular/router';
+import {
+  RouteReuseStrategy,
+  provideRouter,
+  withComponentInputBinding,
+} from '@angular/router';
 import {
   IonicRouteStrategy,
   provideIonicAngular,
@@ -9,11 +13,17 @@ import {
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { NgxsModule } from '@ngxs/store';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { CoreState } from './app/data-access/store/core.state';
+import { ApiModule } from './app/data-access/generated/api.module';
+import {
+  XE_API_URL,
+  xeAuthInterceptor,
+} from './app/data-access/services/xe-auth.interceptor';
 
 if (environment.production) {
   enableProdMode();
@@ -23,10 +33,14 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({ mode: 'ios' }),
-    provideRouter(routes),
-    provideHttpClient(),
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(withInterceptors([xeAuthInterceptor])),
     importProvidersFrom(IonicStorageModule.forRoot()),
-    importProvidersFrom(NgxsModule.forRoot([CoreState])),
-    importProvidersFrom(NgxsStoragePluginModule.forRoot({ key: [CoreState] })),
+    importProvidersFrom([
+      NgxsModule.forRoot([CoreState]),
+      NgxsStoragePluginModule.forRoot({ key: [CoreState] }),
+      NgxsLoggerPluginModule.forRoot(),
+    ]),
+    importProvidersFrom(ApiModule.forRoot({ rootUrl: XE_API_URL })),
   ],
 });

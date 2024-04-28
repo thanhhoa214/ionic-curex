@@ -25,3 +25,7 @@ export class SetBaseCurrency {
   static readonly type = '[Core] Set base currency';
   constructor(public base: string) {}
 }
+
+export class ResetState {
+  static readonly type = '[Core] Reset state';
+}
