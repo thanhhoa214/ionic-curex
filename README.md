@@ -76,7 +76,6 @@ npx cap sync
 - [Capacitor](https://capacitorjs.com/)
 - [NGXS](https://www.ngxs.io/)
 - [Tailwind CSS](https://tailwindcss.com/)
-````
 
 ## Challenges and Obstacles
 
