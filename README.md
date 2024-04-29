@@ -3,15 +3,22 @@
 This project is a currency exchange application built with Angular and Ionic. It uses the [Narodowy Bank Polski](https://api.nbp.pl/en.html) API to fetch exchange rates. Targetting FX traders makes me choose Dark theme as a go-to.
 
 ## Demonstration & Snapshots
+
 https://github.com/thanhhoa214/ionic-curex/assets/32329202/057b88e8-0f83-422a-a4ae-e099fa00feee
-![home](https://github.com/thanhhoa214/ionic-curex/assets/32329202/fe4b6595-3385-49b2-a157-96713995be88)
-![home_detail](https://github.com/thanhhoa214/ionic-curex/assets/32329202/a4840e6b-2026-4d08-8e49-d219f7d5db6e)
-![favorite_reorder_remove](https://github.com/thanhhoa214/ionic-curex/assets/32329202/2e9d11e6-9408-49b8-92e1-e2dea086bf17)
 
-![chart_detail](https://github.com/thanhhoa214/ionic-curex/assets/32329202/9f66c607-ed21-4022-850d-e4bc6b404d0d)
-![tool](https://github.com/thanhhoa214/ionic-curex/assets/32329202/f0456278-636a-4301-b50e-fab8e9e49516)
-![setting](https://github.com/thanhhoa214/ionic-curex/assets/32329202/5f71d745-5e2d-4c61-90a6-3ba0d58ecbbf)
+<br/>
 
+<p align="middle">
+<img src="https://github.com/thanhhoa214/ionic-curex/assets/32329202/fe4b6595-3385-49b2-a157-96713995be88" width="200" alt="Home"/>
+<img src="https://github.com/thanhhoa214/ionic-curex/assets/32329202/a4840e6b-2026-4d08-8e49-d219f7d5db6e" width="200" alt="home_detail"/>
+<img src="https://github.com/thanhhoa214/ionic-curex/assets/32329202/2e9d11e6-9408-49b8-92e1-e2dea086bf17" width="200" alt="favorite_reorder_remove"/>
+
+</p>
+<p align="middle">
+<img src="https://github.com/thanhhoa214/ionic-curex/assets/32329202/9f66c607-ed21-4022-850d-e4bc6b404d0d" width="200" alt="chart_detail"/>
+<img src="https://github.com/thanhhoa214/ionic-curex/assets/32329202/f0456278-636a-4301-b50e-fab8e9e49516" width="200" alt="tool"/>
+<img src="https://github.com/thanhhoa214/ionic-curex/assets/32329202/5f71d745-5e2d-4c61-90a6-3ba0d58ecbbf" width="200" alt="setting"/>
+</p>
 
 ## Features
 
@@ -22,6 +29,7 @@ https://github.com/thanhhoa214/ionic-curex/assets/32329202/057b88e8-0f83-422a-a4
 - Currency conversion: Converts between different currencies using the fetched exchange rates.
 
 ## Coming Features
+
 - iOS Widget for favorite currencies
 
 ## Techniques Used
@@ -72,6 +80,7 @@ npx cap sync
 ```
 
 ## Native Apps
+
 - Look into great Ionic document for iOS: https://capacitorjs.com/docs/ios
 - Look into great Ionic document for Android: https://capacitorjs.com/docs/android
 
@@ -90,4 +99,5 @@ npx cap sync
 - I am so sorry for the late submission. Please, don't take this as my excuse, my wife was sick on weekends, I just want to say with limited time, I tried my best to arrange to research, design, implement, and test to deliver my proud product to you (not as an assignment).
 
 ## Thank you!
+
 Thank you so much for interviews and valuable chats. From the bottom of my heart, I would love to be a part of your team to bring better life quality for everyone. Wish all the best to you!
