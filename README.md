@@ -2,9 +2,15 @@
 
 This project is a currency exchange application built with Angular and Ionic. It uses the [Narodowy Bank Polski](https://api.nbp.pl/en.html) API to fetch exchange rates. Targetting FX traders makes me choose Dark theme as a go-to.
 
-## Demonstration
+## Demonstration & Snapshots
 https://github.com/thanhhoa214/ionic-curex/assets/32329202/057b88e8-0f83-422a-a4ae-e099fa00feee
+![home](https://github.com/thanhhoa214/ionic-curex/assets/32329202/fe4b6595-3385-49b2-a157-96713995be88)
+![home_detail](https://github.com/thanhhoa214/ionic-curex/assets/32329202/a4840e6b-2026-4d08-8e49-d219f7d5db6e)
+![favorite_reorder_remove](https://github.com/thanhhoa214/ionic-curex/assets/32329202/2e9d11e6-9408-49b8-92e1-e2dea086bf17)
 
+![chart_detail](https://github.com/thanhhoa214/ionic-curex/assets/32329202/9f66c607-ed21-4022-850d-e4bc6b404d0d)
+![tool](https://github.com/thanhhoa214/ionic-curex/assets/32329202/f0456278-636a-4301-b50e-fab8e9e49516)
+![setting](https://github.com/thanhhoa214/ionic-curex/assets/32329202/5f71d745-5e2d-4c61-90a6-3ba0d58ecbbf)
 
 
 ## Features
