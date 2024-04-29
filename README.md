@@ -65,6 +65,10 @@ To copy web bundle and assets to native apps, use the following command:
 npx cap sync
 ```
 
+## Native Apps
+- Look into great Ionic document for iOS: https://capacitorjs.com/docs/ios
+- Look into great Ionic document for Android: https://capacitorjs.com/docs/android
+
 ## Built With
 
 - [Angular 17](https://angular.io/)
@@ -76,5 +80,9 @@ npx cap sync
 
 ## Challenges and Obstacles
 
-- Got trouble with latest XCode iOS version installation, took hours while getting network/storage errors time after time.
-- Trial API budget run out at the day of submission during development => Switched all codes from XE exchange API and https://rapidapi.com/exchangerateapi/api/exchangerate-api to use http://api.nbp.pl/en.html
+- I got into trouble with the latest XCode iOS version installation, took hours while getting network/storage errors time after time.
+- Trial API budget ran out on the day of submission during development => Switched all codes from XE exchange API and https://rapidapi.com/exchangerateapi/api/exchangerate-api to use http://api.nbp.pl/en.html
+- I am so sorry for the late submission. Please, don't take this as my excuse, my wife was sick on weekends, I just want to say with limited time, I tried my best to arrange to research, design, implement, and test to deliver my proud product to you (not as an assignment).
+
+## Thank you!
+Thank you so much for interviews and valuable chats. From the bottom of my heart, I would love to be a part of your team to bring better life quality for everyone. Wish all the best to you!
