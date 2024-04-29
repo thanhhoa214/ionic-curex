@@ -37,8 +37,6 @@ To get a local copy up and running, follow these steps:
 git clone https://github.com/thanhhoa214/ionic-curex.git
 ```
 
-````
-
 2. Install the dependencies:
 
 ```bash
