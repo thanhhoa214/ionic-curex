@@ -1,8 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar class="pb-2">
     <ion-title>
-      <h2 class="font-bold text-sm">{{ base() }}/{{ code()?.iso }}</h2>
-      <p class="text-xs font-normal">{{ code()?.currency_name }}</p>
+      <h2 class="font-bold text-sm">{{ base() }}/{{ code()?.code }}</h2>
+      <p class="text-xs font-normal">{{ code()?.currency }}</p>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,10 +11,8 @@
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">
-        <h2 class="font-bold">{{ base() }}/{{ code()?.iso }}</h2>
-        <p class="text-sm font-normal">
-          {{ code()?.currency_name }}
-        </p></ion-title
+        <h2 class="font-bold">{{ base() }}/{{ code()?.code }}</h2>
+        <p class="text-sm font-normal">{{ code()?.currency }}</p></ion-title
       >
       <ion-button
         fill="clear"
@@ -49,11 +47,7 @@
     }
   </header>
 
-  <app-line-chart
-    [params]="chartParams()"
-    [loading]="chartLoading()"
-    class="block max-w-xl"
-  />
+  <app-line-chart [params]="chartParams()" [loading]="chartLoading()" />
 
   <ion-segment
     #dayFilter

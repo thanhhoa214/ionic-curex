@@ -22,8 +22,12 @@ import {
   shieldCheckmarkOutline,
   starHalfOutline,
 } from 'ionicons/icons';
-import { ExchangeRateApiService } from 'src/app/data-access/services/exrate-api.service';
 import { CoreState, SetBaseCurrency } from 'src/app/data-access/store';
+import {
+  FetchRates,
+  FetchYesterdayRates,
+} from 'src/app/data-access/store/rate/rate.actions';
+import { RateState } from 'src/app/data-access/store/rate/rate.state';
 
 @Component({
   selector: 'app-setting-page',
@@ -49,7 +53,7 @@ import { CoreState, SetBaseCurrency } from 'src/app/data-access/store';
 })
 export class SettingPage {
   private store = inject(Store);
-  codes = toSignal(this.store.select(CoreState.codes));
+  codes = toSignal(this.store.select(RateState.rates));
   base = toSignal(this.store.select(CoreState.base));
 
   constructor() {
@@ -58,5 +62,7 @@ export class SettingPage {
 
   setBaseCurrency(code: string) {
     this.store.dispatch(new SetBaseCurrency(code));
+    this.store.dispatch(new FetchRates());
+    this.store.dispatch(new FetchYesterdayRates());
   }
 }

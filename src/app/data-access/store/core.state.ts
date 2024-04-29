@@ -1,26 +1,20 @@
-import { Injectable, inject } from '@angular/core';
-import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import {
   AddFavorite,
-  FetchCodes,
   RemoveFavorite,
   ReorderFavorites,
   ResetState,
   SetBaseCurrency,
 } from './core.actions';
-import { tap } from 'rxjs';
-import { CurrencyInformationService } from '../generated/services';
-import { CurrencyInfoResponse } from '../generated/models';
 
 export interface CoreStateModel {
   base: string;
-  codes: CurrencyInfoResponse['currencies'] | null;
   favorites: string[];
 }
 
 const initState: CoreStateModel = {
   base: 'USD',
-  codes: null,
   favorites: [],
 };
 
@@ -29,27 +23,12 @@ const initState: CoreStateModel = {
   defaults: initState,
 })
 @Injectable()
-export class CoreState implements NgxsOnInit {
-  private xeCurrencyApi = inject(CurrencyInformationService);
-
-  ngxsOnInit(ctx: StateContext<CoreStateModel>): void {
-    if (ctx.getState().codes === null) ctx.dispatch(new FetchCodes());
-  }
-
-  @Selector() static codes(state: CoreStateModel) {
-    return state.codes;
-  }
+export class CoreState {
   @Selector() static base(state: CoreStateModel) {
     return state.base;
   }
   @Selector() static favorites(state: CoreStateModel) {
     return state.favorites;
-  }
-
-  @Action(FetchCodes) fetchCodes({ patchState }: StateContext<CoreStateModel>) {
-    return this.xeCurrencyApi
-      .v1CurrenciesGet()
-      .pipe(tap((response) => patchState({ codes: response.currencies })));
   }
 
   @Action(AddFavorite) addFavorite(

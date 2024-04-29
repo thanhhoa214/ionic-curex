@@ -14,9 +14,9 @@ import {
   IonSelect,
   IonSelectOption,
   IonButton,
+  IonNote,
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
-import { CoreState } from 'src/app/data-access/store';
 import { RateState } from 'src/app/data-access/store/rate/rate.state';
 
 @Component({
@@ -24,6 +24,7 @@ import { RateState } from 'src/app/data-access/store/rate/rate.state';
   styleUrls: ['tool.page.scss'],
   standalone: true,
   imports: [
+    IonNote,
     IonButton,
     IonList,
     IonInput,
@@ -41,7 +42,7 @@ import { RateState } from 'src/app/data-access/store/rate/rate.state';
 })
 export class ToolPage {
   private store = inject(Store);
-  codesWithRate = toSignal(this.store.select(RateState.codesWithRate));
+  codesWithRate = toSignal(this.store.select(RateState.rates));
 
   from = signal('USD');
   to = signal('AUD');
@@ -54,7 +55,7 @@ export class ToolPage {
         const from = this.codesWithRate()?.find((c) => c.code === this.from());
         const to = this.codesWithRate()?.find((c) => c.code === this.to());
         this.toAmount.set(
-          from && to ? (this.fromAmount() * from.rate) / to.rate : 0
+          from && to ? (this.fromAmount() * from.mid) / to.mid : 0
         );
       },
       { allowSignalWrites: true }

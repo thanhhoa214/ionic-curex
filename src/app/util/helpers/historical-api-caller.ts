@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { catchError, forkJoin, map, switchMap } from 'rxjs';
+import { forkJoin, map, switchMap } from 'rxjs';
 import { NbpHistoricalRates } from 'src/app/data-access/models/nbp-historical-rates.model';
 import { ExchangeRateApiService } from 'src/app/data-access/services/exrate-api.service';
 import { CoreState } from 'src/app/data-access/store';
@@ -15,13 +15,7 @@ export function historicalApiCaller() {
       switchMap((base) =>
         forkJoin(
           [base, counter].map((code) =>
-            apiService
-              .getHistoricalRates(code, start, end)
-              .pipe(
-                catchError(() =>
-                  apiService.getHistoricalRates(code, start, end, 'B')
-                )
-              )
+            apiService.getHistoricalRates(code, start, end)
           )
         )
       ),

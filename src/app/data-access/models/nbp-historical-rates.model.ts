@@ -11,3 +11,16 @@ export interface Rate {
   effectiveDate: string;
   mid: number;
 }
+
+export interface NbpTableRates {
+  table: string;
+  no: string;
+  effectiveDate: Date;
+  rates: NbpTableRate[];
+}
+
+export interface NbpTableRate {
+  currency: string;
+  code: string;
+  mid: number;
+}

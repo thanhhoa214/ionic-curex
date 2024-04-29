@@ -57,7 +57,7 @@ export function getChartOptions({
     chart: {
       type: 'area',
       backgroundColor: 'var(--ion-background-color)',
-      style: { fontFamily: 'Inter', fontWeight: 'normal' },
+      style: { fontWeight: 'normal' },
       zooming: { mouseWheel: false, singleTouch: false, type: 'x' },
       events: {
         load: function () {
@@ -100,7 +100,7 @@ export function getChartOptions({
         style: { fontSize: '11px', color: 'var(--ion-color-dark-tint)' },
         formatter: ({ value }) => `${value}`,
       },
-      gridLineColor: 'var(--ion-color-light-shade)',
+      gridLineColor: 'var(--ion-text-color-step-900)',
       gridLineDashStyle: 'Solid',
       gridLineWidth: 0.7,
       min: (() => {
@@ -175,7 +175,7 @@ export function getChartOptions({
 function insertDataLabels(
   numbers: number[][]
 ): Highcharts.SeriesAreaOptions['data'] {
-  const highLow = getDataHighLowIndex(numbers.filter((d) => d));
+  const highLow = getDataHighLowIndex(numbers);
   const result: Highcharts.SeriesAreaOptions['data'] = [...numbers];
 
   highLow.forEach((element, index) => {

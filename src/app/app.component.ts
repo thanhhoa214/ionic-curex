@@ -10,7 +10,9 @@ import { REFRESH_TIME_SEC } from './util/constants';
 
 @Component({
   selector: 'app-root',
-  template: `<ion-app><ion-router-outlet /></ion-app> `,
+  template: `<ion-app class="max-w-3xl mx-auto"
+    ><ion-router-outlet
+  /></ion-app> `,
   standalone: true,
   imports: [IonApp, IonRouterOutlet],
 })

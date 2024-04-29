@@ -9,20 +9,21 @@ import {
 } from '@ngxs/store';
 import { FetchRates, FetchYesterdayRates } from './rate.actions';
 import { tap } from 'rxjs';
-import { MidMarketRatesService } from '../../generated/services';
-import { Rate } from '../../generated/models';
 import { CoreState, CoreStateModel } from '../core.state';
 import { subDays } from 'date-fns/subDays';
 import { startOfDay } from 'date-fns/startOfDay';
 import { nonNullable } from 'src/app/util/helpers/non-nullable';
+import { ExchangeRateApiService } from '../../services/exrate-api.service';
+import { NbpTableRate } from '../../models/nbp-historical-rates.model';
+import { globalFormatDate } from 'src/app/util/helpers/global-format-date';
 
 export interface RateStateModel {
-  rates: Rate[] | null;
+  rates: NbpTableRate[] | null;
   lastUpdateAt: number | null;
   historical: {
-    yesterday?: Rate[];
-    lastWeek?: Rate[];
-    lastMonth?: Rate[];
+    yesterday?: NbpTableRate[];
+    lastWeek?: NbpTableRate[];
+    lastMonth?: NbpTableRate[];
   };
 }
 
@@ -39,8 +40,11 @@ const initState: RateStateModel = {
 @Injectable()
 export class RateState {
   private store = inject(Store);
-  private xeMidMarketRateApi = inject(MidMarketRatesService);
+  private exchangeApi = inject(ExchangeRateApiService);
 
+  @Selector() static codes(state: RateStateModel) {
+    return state.rates?.map((r) => r.code);
+  }
   @Selector() static rates(state: RateStateModel) {
     return state.rates;
   }
@@ -53,7 +57,7 @@ export class RateState {
         const ystRate = historical.yesterday?.[index];
         if (ystRate === undefined) return undefined;
         return {
-          code: rate.quotecurrency,
+          code: rate.code,
           rate: rate.mid,
           ystRateMid: ystRate.mid,
           changePercentage: (rate.mid - ystRate.mid) / ystRate.mid,
@@ -73,28 +77,14 @@ export class RateState {
         >
       );
   }
-  @Selector([CoreState]) static codesWithRate(
-    { rates }: RateStateModel,
-    { codes }: CoreStateModel
-  ) {
-    return codes?.map((code) => {
-      const rate = rates?.find((r) => r.quotecurrency === code.iso)?.mid;
-      return {
-        code: code.iso,
-        name: code.currency_name,
-        rate: rate ? Math.round((1 / rate) * 1000000) / 1000000 : 0,
-      };
-    });
-  }
-  @Selector([RateState.codesWithRate, CoreState.favorites])
+  @Selector([CoreState.favorites])
   static favoritesWithRate(
-    _: RateStateModel,
-    codesWithRate: ReturnType<typeof RateState.codesWithRate>,
+    { rates }: RateStateModel,
     favorites: CoreStateModel['favorites']
   ) {
-    const map = codesWithRate?.reduce(
+    const map = rates?.reduce(
       (pre, cur) => ({ ...pre, [cur.code]: cur }),
-      {} as Record<string, { code: string; name: string; rate: number }>
+      {} as Record<string, NbpTableRate>
     );
     return favorites.map((f) => map?.[f]).filter(nonNullable);
   }
@@ -106,19 +96,12 @@ export class RateState {
   }
 
   @Action(FetchRates) fetchRates({ patchState }: StateContext<RateStateModel>) {
-    const { codes, base } = this.store.selectSnapshot(
-      CoreState
-    ) as CoreStateModel;
+    const base = this.store.selectSnapshot(CoreState.base);
 
-    return this.xeMidMarketRateApi
-      .v1ConvertFromGet({
-        from: base,
-        to: codes?.map((code) => code.iso).join(',') ?? '',
-      })
+    return this.exchangeApi
+      .getRates(base)
       .pipe(
-        tap((response) =>
-          patchState({ rates: response.to, lastUpdateAt: Date.now() })
-        )
+        tap(({ rates }) => patchState({ rates, lastUpdateAt: Date.now() }))
       );
   }
 
@@ -126,20 +109,20 @@ export class RateState {
     patchState,
     getState,
   }: StateContext<RateStateModel>) {
-    const { codes, base } = this.store.selectSnapshot(
-      CoreState
-    ) as CoreStateModel;
-    const yesterday = startOfDay(subDays(new Date(), 1)).toISOString();
+    const base = this.store.selectSnapshot(CoreState.base);
+    const today = new Date();
+
+    let minus = 1;
+    // If Monday, get Friday's rate
+    if (today.getUTCDay() === 1) minus = 3;
+    const dayBefore = globalFormatDate(startOfDay(subDays(today, minus)));
+
     const { historical } = getState();
-    return this.xeMidMarketRateApi
-      .v1HistoricRateGet({
-        from: base,
-        to: codes?.map((code) => code.iso).join(',') ?? '',
-        date: yesterday,
-      })
+    return this.exchangeApi
+      .getRates(base, dayBefore)
       .pipe(
-        tap((response) =>
-          patchState({ historical: { ...historical, yesterday: response.to } })
+        tap(({ rates }) =>
+          patchState({ historical: { ...historical, yesterday: rates } })
         )
       );
   }

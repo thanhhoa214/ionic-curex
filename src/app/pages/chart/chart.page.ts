@@ -74,13 +74,13 @@ const today = new Date();
 })
 export class ChartPage {
   private store = inject(Store);
-  private codes = toSignal(this.store.select(CoreState.codes));
+  private codes = toSignal(this.store.select(RateState.rates));
   private favorites = toSignal(this.store.select(RateState.favoritesWithRate));
   base = toSignal(this.store.select(CoreState.base), { initialValue: 'USD' });
   // withComponentInputBinding binds router param to input property directly
   counter = input('counter');
 
-  code = computed(() => this.codes()?.find((c) => c.iso === this.counter()));
+  code = computed(() => this.codes()?.find((c) => c.code === this.counter()));
   counterRate = toSignal(
     toObservable(this.counter).pipe(
       filter(nonNullable),

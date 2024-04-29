@@ -15,23 +15,15 @@
         [selectedText]="baseSelect.value"
         (ionChange)="setBaseCurrency(baseSelect.value)"
       >
-        @for (item of codes(); track item.iso) {
-        <ion-select-option [value]="item.iso"
-          ><strong>{{item.iso}}</strong>
-          ({{item.currency_name}})</ion-select-option
+        @for (item of codes(); track item.code) {
+        <ion-select-option [value]="item.code"
+          ><strong>{{item.code}}</strong> ({{item.currency}})</ion-select-option
         >
         }
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-select label="Appearance" value="system">
-        <ion-select-option value="system">System</ion-select-option>
-        <ion-select-option value="dark">Dark</ion-select-option>
-        <ion-select-option value="light">Light</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-toggle>Notification</ion-toggle>
+      <ion-toggle disabled>Notification </ion-toggle>
     </ion-item>
   </ion-list>
 

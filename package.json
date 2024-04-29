@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "author": "Curex",
   "homepage": "https://ionicframework.com/",
+  "description": "Ionic test currency exchange project for active8me interview",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -36,11 +37,9 @@
     "@ngxs/logger-plugin": "^3.8.2",
     "@ngxs/storage-plugin": "^3.8.2",
     "@ngxs/store": "^3.8.2",
-    "chart.js": "^4.4.2",
     "date-fns": "^3.6.0",
     "highcharts": "^11.4.1",
     "highcharts-angular": "^4.0.0",
-    "ion2-calendar": "^3.5.0",
     "ionicons": "^7.2.1",
     "ng-openapi-gen": "^0.51.0",
     "rxjs": "~7.8.0",
@@ -79,7 +78,6 @@
     "tailwindcss": "^3.4.3",
     "typescript": "~5.2.2"
   },
-  "description": "An Ionic project",
   "browserslist": [
     "Chrome >=79",
     "ChromeAndroid >=79",

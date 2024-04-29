@@ -68,7 +68,7 @@ import { CurrencyAdditionalInfoComponent } from '../currency-additional-info/cur
 })
 export class CurrencyDetailSheetComponent {
   private store = inject(Store);
-  private codes = toSignal(this.store.select(CoreState.codes));
+  private codes = toSignal(this.store.select(RateState.rates));
   private favorites = toSignal(this.store.select(RateState.favoritesWithRate));
   private historicalApi = historicalApiCaller();
 
@@ -87,7 +87,7 @@ export class CurrencyDetailSheetComponent {
   isInFavorite = computed(() =>
     this.favorites()?.some((f) => f.code === this.counter())
   );
-  code = computed(() => this.codes()?.find((c) => c.iso === this.counter()));
+  code = computed(() => this.codes()?.find((c) => c.code === this.counter()));
   chartParams = signal<GetChartOptionsParams | undefined>(undefined);
   chartLoading = signal(true);
 

@@ -21,6 +21,7 @@ import {
   IonReorderGroup,
   ItemReorderEventDetail,
   IonReorder,
+  IonNote,
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { addIcons } from 'ionicons';
@@ -46,13 +47,12 @@ import { nonNullable } from 'src/app/util/helpers/non-nullable';
 import { REFRESH_TIME_SEC } from 'src/app/util/constants';
 import { AsyncPipe, DecimalPipe, NgClass } from '@angular/common';
 
-const CURRENCY_LIMIT = 10;
-
 @Component({
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
+    IonNote,
     IonReorder,
     IonReorderGroup,
     IonItemOption,
@@ -80,18 +80,15 @@ const CURRENCY_LIMIT = 10;
   ],
 })
 export class HomePage {
+  readonly CURRENCY_LIMIT = 10;
   private store = inject(Store);
 
   base = toSignal(this.store.select(CoreState.base));
-  codes = toSignal(
-    this.store
-      .select(CoreState.codes)
-      .pipe(filter((_, index) => index < CURRENCY_LIMIT))
-  );
   favorites = toSignal(this.store.select(RateState.favoritesWithRate));
-  codesWithRate = toSignal(this.store.select(RateState.codesWithRate));
+  codesWithRate = toSignal(this.store.select(RateState.rates));
   ystChangeRate = toSignal(this.store.select(RateState.ystChangeRate));
   selectedCode = signal<string | null>(null);
+  allCurrencyExpanded = signal(false);
   showAddFavoriteSheet = signal(false);
   inEditFavorites = signal(false);
   lastUpdateAt$ = this.store.select(RateState.lastUpdateAt).pipe(

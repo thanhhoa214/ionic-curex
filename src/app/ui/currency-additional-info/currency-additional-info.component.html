@@ -1,9 +1,11 @@
 <h3>Recommendations</h3>
-<div class="w-full overflow-auto no-scrollbar">
+<div class="w-full overflow-auto no-scrollbar mt-2">
   <section class="flex gap-2 px-4 flex-nowrap">
     <!-- Carousel of ion-card for similar pairs -->
     @for (item of recommendations; track item) {
-    <div class="border border-slate-300 rounded-lg py-2 px-4 font-semibold">
+    <div
+      class="border border-ion-text-color-step-600 text-ion-text-color-step-200 rounded-lg py-2 px-4 font-semibold"
+    >
       {{ item }}
     </div>
     }

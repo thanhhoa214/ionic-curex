@@ -12,13 +12,13 @@
 
 <ion-content class="overflow-scroll">
   <ion-list [inset]="true">
-    @for (item of filteredCodes(); track item.iso) {
+    @for (item of filteredCodes(); track item.code) {
     <ion-item>
       <ion-checkbox
-        [value]="item.iso"
-        [checked]="favorites()?.includes(item.iso)"
+        [value]="item.code"
+        [checked]="favorites()?.includes(item.code)"
         (ionChange)="checkboxChange($event.detail)"
-        >{{ item.currency_name }}</ion-checkbox
+        >{{ item.currency }}</ion-checkbox
       >
     </ion-item>
     }

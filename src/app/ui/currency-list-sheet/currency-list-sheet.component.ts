@@ -37,7 +37,7 @@ import { RateState } from 'src/app/data-access/store/rate/rate.state';
 })
 export class CurrencyListSheetComponent {
   private store = inject(Store);
-  private codes = toSignal(this.store.select(CoreState.codes));
+  private codes = toSignal(this.store.select(RateState.rates));
 
   favorites = toSignal(
     this.store
@@ -48,7 +48,7 @@ export class CurrencyListSheetComponent {
 
   filteredCodes = computed(() =>
     this.codes()?.filter((c) =>
-      [c.iso.toLowerCase(), c.currency_name.toLowerCase()].some((n) =>
+      [c.code.toLowerCase(), c.currency.toLowerCase()].some((n) =>
         n.includes(this.search())
       )
     )

@@ -4,9 +4,13 @@
 }
 
 h2 {
-  @apply text-sm uppercase tracking-wide text-ion-text-color-step-200;
+  @apply text-sm uppercase tracking-wide;
 }
 
 .header-button {
-  @apply text-sm font-medium active:text-ion-color-primary;
+  @apply text-sm font-medium;
+}
+
+ion-list:first-child ion-item {
+  --background: var(--ion-color-primary-tint);
 }

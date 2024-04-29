@@ -2,6 +2,10 @@ export class FetchCodes {
   static readonly type = '[Core] Fetch codes';
 }
 
+export class FetchRates {
+  static readonly type = '[Core] Fetch rates';
+}
+
 export class AddFavorite {
   static readonly type = '[Core] Add favorite';
   constructor(public code: string) {}

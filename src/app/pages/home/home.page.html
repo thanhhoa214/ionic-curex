@@ -1,98 +1,114 @@
 <ion-content [fullscreen]="true">
-  <h1 class="text-2xl font-bold p-4">Currency Exchange</h1>
-
-  <header class="flex justify-between items-center px-8 font-bold">
-    <h2>Favorites</h2>
-    @if (favorites(); as favorites) { @if (favorites.length > 0) {
-    <button (click)="toggleEdit()" class="header-button">
-      {{inEditFavorites() ? 'Done':'Reorder'}}
-    </button>
-    }}
-  </header>
-  <ion-list
-    [inset]="true"
-    class="border border-ion-background-color-step-200 !mt-0.5"
+  <div
+    class="py-2 px-6 rounded-b-2xl mb-4 bg-gradient-to-br from-ion-color-primary-contrast to-ion-color-primary-shade text-ion-color-primary-tint"
   >
-    <ion-reorder-group
-      [disabled]="false"
-      (ionItemReorder)="handleReorder($event)"
-    >
-      @for (item of favorites(); track item.code) {
-      <ion-item-sliding>
-        <ion-item button [detail]="false" (click)="selectedCode.set(item.code)">
-          @if (inEditFavorites()) {
-          <ion-reorder class="mr-1">
-            <ion-icon name="chevron-expand-outline" size="large" />
-          </ion-reorder>
-          }
-          <ion-label>
-            <strong>{{base()}}/{{item.code}}</strong>
-            <p>{{item.name}}</p>
-          </ion-label>
-          <div class="flex flex-col items-end">
-            <ion-text class="font-medium">{{item.rate}}</ion-text>
-            @if (ystChangeRate()?.[item.code]; as ystChange) {
-            <small
-              class="text-sm"
-              [ngClass]="ystChange.changePercentage === 0 ? 'text-gray-600': ystChange.changePercentage > 0 ? 'text-green-600': 'text-red-600'"
-              >{{ystChange.changePercentage *100| number : '1.2-2'}}%
-            </small>
+    <img
+      src="/assets/icon/favicon.png"
+      alt="active8me logo"
+      width="60"
+      height="60"
+      class="mt-4 mb-2"
+    />
+    <h1 class="text-2xl font-bold">Currency Exchange</h1>
+    <p class="mb-4">Hola! Curex is all you need for trading career</p>
+    <header class="flex justify-between items-center px-4 font-bold">
+      <h2>Favorites</h2>
+      @if (favorites(); as favorites) { @if (favorites.length > 0) {
+      <button (click)="toggleEdit()" class="header-button">
+        {{inEditFavorites() ? 'Done':'Reorder'}}
+      </button>
+      }}
+    </header>
+    <ion-list [inset]="true" class="!mx-0 !mt-1 bg-secondary">
+      <ion-reorder-group
+        [disabled]="false"
+        (ionItemReorder)="handleReorder($event)"
+      >
+        @for (item of favorites(); track item.code) {
+        <ion-item-sliding>
+          @if (ystChangeRate()?.[item.code]; as ystChange) {
+          <ion-item
+            button
+            [detail]="false"
+            (click)="selectedCode.set(item.code)"
+          >
+            @if (inEditFavorites()) {
+            <ion-reorder class="mr-1">
+              <ion-icon name="chevron-expand-outline" size="large" />
+            </ion-reorder>
             }
+            <ion-label>
+              <strong>{{base()}}/{{ystChange.code}}</strong>
+              <p>{{item.currency}}</p>
+            </ion-label>
+            <div class="flex flex-col items-end">
+              <ion-text class="font-medium"
+                >{{ystChange.rate| number : '1.2-6'}}</ion-text
+              >
+              <small
+                class="text-sm"
+                [ngClass]="ystChange.changePercentage === 0 ? 'text-gray-600': ystChange.changePercentage > 0 ? 'text-green-600': 'text-red-600'"
+                >{{ystChange.changePercentage *100| number : '1.2-2'}}%
+              </small>
+            </div>
+          </ion-item>
+          <ion-item-options slot="end">
+            <ion-item-option
+              color="danger"
+              expandable="true"
+              (click)="removeFavorite(item.code)"
+            >
+              <ion-icon slot="icon-only" name="trash-outline" />
+            </ion-item-option>
+          </ion-item-options>
+          }
+        </ion-item-sliding>
+        } @empty {
+        <ion-item>
+          <div class="w-full pt-4 text-center">
+            <ion-icon name="color-wand-outline" size="large" />
+            <p>Quickly check favorites pairs here</p>
           </div>
         </ion-item>
-        <ion-item-options slot="end">
-          <ion-item-option
-            color="danger"
-            expandable="true"
-            (click)="removeFavorite(item.code)"
-          >
-            <ion-icon slot="icon-only" name="trash-outline" />
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-      } @empty {
-      <ion-item>
-        <div class="w-full p-4 text-center">
-          <ion-icon name="color-wand-outline" size="large" />
-          <p>Quickly check favorites pairs here</p>
-
-          <ion-button (click)="showAddFavoriteSheet.set(true)">
-            <ion-icon name="add-circle-outline" class="mr-1" /> Add pairs
-          </ion-button>
-        </div>
-      </ion-item>
-      }
-    </ion-reorder-group>
-  </ion-list>
+        }
+      </ion-reorder-group>
+      <ion-button
+        fill="clear"
+        expand="full"
+        (click)="showAddFavoriteSheet.set(true)"
+      >
+        <ion-icon name="add-circle-outline" class="mr-1" /> Add pairs
+      </ion-button>
+    </ion-list>
+  </div>
 
   <header class="flex justify-between items-center px-8 font-bold">
-    <h2>All currencies</h2>
-
-    @if (codesWithRate(); as codes) { @if (codes && codes.length > 10) {
-    <button class="header-button">View all</button>
-    } }
+    <h2 class="text-ion-text-color-step-500">All currencies</h2>
   </header>
 
   <ion-list
     [inset]="true"
     class="border border-ion-background-color-step-200 !mt-2"
   >
-    @for (item of codesWithRate()?.slice(0, 10); track item.code) {
+    @for (item of codesWithRate()?.slice(0, allCurrencyExpanded() ? 10000:
+    CURRENCY_LIMIT); track item.code) {
     <ion-item button [detail]="false" (click)="selectedCode.set(item.code)">
+      @if (ystChangeRate()?.[item.code]; as ystChange) {
       <ion-label>
         <strong>{{base()}}/{{item.code}}</strong>
-        <p>{{item.name}}</p>
+        <p>{{item.currency}}</p>
       </ion-label>
       <div class="flex flex-col items-end">
-        <ion-text class="font-medium">{{item.rate}}</ion-text>
-        @if (ystChangeRate()?.[item.code]; as ystChange) {
+        <ion-text class="font-medium"
+          >{{ystChange.rate| number : '1.2-6'}}</ion-text
+        >
         <small
           class="text-sm"
           [ngClass]="ystChange.changePercentage === 0 ? 'text-gray-600': ystChange.changePercentage > 0 ? 'text-green-600': 'text-red-600'"
           >{{ystChange.changePercentage *100| number : '1.2-2'}}%
         </small>
-        }
       </div>
+      }
     </ion-item>
     } @empty {
     <ion-item>
@@ -101,12 +117,21 @@
         <p>Loading...</p>
       </div>
     </ion-item>
-    }
+    } @if (codesWithRate(); as codes) { @if (codes && codes.length >
+    CURRENCY_LIMIT) {
+    <ion-button
+      fill="clear"
+      expand="full"
+      (click)="allCurrencyExpanded.set(!allCurrencyExpanded())"
+      >View {{allCurrencyExpanded() ? 'less': 'more'}}</ion-button
+    >
+    } }
   </ion-list>
-
-  <p class="m-4 mt-0 text-center text-ion-text-color-step-500">
-    Latest update at<br />
-    {{lastUpdateAt$|async}} (refreshes in {{refreshCountdown$|async}}s)
+  <p class="text-center pb-4">
+    <ion-note class="m-4 mt-0">
+      Latest update at<br />
+      {{lastUpdateAt$|async}} (refreshes in {{refreshCountdown$|async}}s)
+    </ion-note>
   </p>
 </ion-content>
 
