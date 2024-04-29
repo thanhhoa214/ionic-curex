@@ -79,7 +79,7 @@ npx cap sync
 
 ## Challenges and Obstacles
 
-- I got into trouble with the latest XCode iOS version installation, took hours while getting network/storage errors time after time.
+- I got into trouble with the latest XCode iOS version installation, took hours while getting network/storage errors time after time. => Switched to test on Android, I will try installing it back and update iOS demo here.
 - Trial API budget ran out on the day of submission during development => Switched all codes from XE exchange API and https://rapidapi.com/exchangerateapi/api/exchangerate-api to use http://api.nbp.pl/en.html
 - I am so sorry for the late submission. Please, don't take this as my excuse, my wife was sick on weekends, I just want to say with limited time, I tried my best to arrange to research, design, implement, and test to deliver my proud product to you (not as an assignment).
 
