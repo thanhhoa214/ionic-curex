@@ -18,6 +18,7 @@ import {
   AddFavorite,
   RemoveFavorite,
 } from 'src/app/data-access/store';
+import { RateState } from 'src/app/data-access/store/rate/rate.state';
 @Component({
   selector: 'app-currency-list-sheet',
   templateUrl: './currency-list-sheet.component.html',
@@ -40,7 +41,7 @@ export class CurrencyListSheetComponent {
 
   favorites = toSignal(
     this.store
-      .select(CoreState.favorites)
+      .select(RateState.favoritesWithRate)
       .pipe(map((f) => f?.map((c) => c.code)))
   );
   search = signal('');

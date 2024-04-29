@@ -1,16 +1,13 @@
 <ion-content [fullscreen]="true">
   <h1 class="text-2xl font-bold p-4">Currency Exchange</h1>
 
-  <header class="flex justify-between items-center px-4 font-bold">
-    <h2 class="tracking-wide">Favorites</h2>
-    <ion-button
-      fill="clear"
-      size="small"
-      (click)="toggleEdit()"
-      class="m-0 py-1 px-2"
-    >
-      {{inEditFavorites() ? 'Done':'Edit'}}
-    </ion-button>
+  <header class="flex justify-between items-center px-8 font-bold">
+    <h2>Favorites</h2>
+    @if (favorites(); as favorites) { @if (favorites.length > 0) {
+    <button (click)="toggleEdit()" class="header-button">
+      {{inEditFavorites() ? 'Done':'Reorder'}}
+    </button>
+    }}
   </header>
   <ion-list
     [inset]="true"
@@ -32,7 +29,16 @@
             <strong>{{base()}}/{{item.code}}</strong>
             <p>{{item.name}}</p>
           </ion-label>
-          <ion-text>{{item.rate}}</ion-text>
+          <div class="flex flex-col items-end">
+            <ion-text class="font-medium">{{item.rate}}</ion-text>
+            @if (ystChangeRate()?.[item.code]; as ystChange) {
+            <small
+              class="text-sm"
+              [ngClass]="ystChange.changePercentage === 0 ? 'text-gray-600': ystChange.changePercentage > 0 ? 'text-green-600': 'text-red-600'"
+              >{{ystChange.changePercentage *100| number : '1.2-2'}}%
+            </small>
+            }
+          </div>
         </ion-item>
         <ion-item-options slot="end">
           <ion-item-option
@@ -59,8 +65,12 @@
     </ion-reorder-group>
   </ion-list>
 
-  <header class="flex justify-between items-center px-4 font-bold">
-    <h2 class="tracking-wide">All currencies</h2>
+  <header class="flex justify-between items-center px-8 font-bold">
+    <h2>All currencies</h2>
+
+    @if (codesWithRate(); as codes) { @if (codes && codes.length > 10) {
+    <button class="header-button">View all</button>
+    } }
   </header>
 
   <ion-list
@@ -73,7 +83,16 @@
         <strong>{{base()}}/{{item.code}}</strong>
         <p>{{item.name}}</p>
       </ion-label>
-      <ion-text slot="end">{{item.rate}}</ion-text>
+      <div class="flex flex-col items-end">
+        <ion-text class="font-medium">{{item.rate}}</ion-text>
+        @if (ystChangeRate()?.[item.code]; as ystChange) {
+        <small
+          class="text-sm"
+          [ngClass]="ystChange.changePercentage === 0 ? 'text-gray-600': ystChange.changePercentage > 0 ? 'text-green-600': 'text-red-600'"
+          >{{ystChange.changePercentage *100| number : '1.2-2'}}%
+        </small>
+        }
+      </div>
     </ion-item>
     } @empty {
     <ion-item>
@@ -83,11 +102,12 @@
       </div>
     </ion-item>
     }
-    <!--  -->
-    @if (codesWithRate(); as codes) { @if (codes.length > 10) {
-    <ion-button fill="clear" class="w-full">View all</ion-button>
-    } }
   </ion-list>
+
+  <p class="m-4 mt-0 text-center text-ion-text-color-step-500">
+    Latest update at<br />
+    {{lastUpdateAt$|async}} (refreshes in {{refreshCountdown$|async}}s)
+  </p>
 </ion-content>
 
 <ion-modal

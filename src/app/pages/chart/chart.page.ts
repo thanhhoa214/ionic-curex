@@ -21,8 +21,16 @@ import {
   IonDatetime,
   IonButton,
   DatetimeChangeEventDetail,
+  IonFooter,
 } from '@ionic/angular/standalone';
-import { combineLatest, filter, forkJoin, map, switchMap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  filter,
+  forkJoin,
+  map,
+  switchMap,
+} from 'rxjs';
 import { ExchangeRateApiService } from 'src/app/data-access/services/exrate-api.service';
 import { GetChartOptionsParams } from 'src/app/util/helpers/highchart-options-builder';
 import { Store } from '@ngxs/store';
@@ -34,6 +42,7 @@ import { LineChartComponent } from '../../ui/line-chart/line-chart.component';
 import { addDays } from 'date-fns/addDays';
 import { subDays } from 'date-fns/subDays';
 import { globalFormatDate } from 'src/app/util/helpers/global-format-date';
+import { historicalApiCaller } from 'src/app/util/helpers/historical-api-caller';
 
 const today = new Date();
 @Component({
@@ -42,6 +51,7 @@ const today = new Date();
   styleUrls: ['chart.page.scss'],
   standalone: true,
   imports: [
+    IonFooter,
     IonButton,
     IonDatetime,
     IonModal,
@@ -74,20 +84,23 @@ export class ChartPage {
 
   // API only supports rates with base PLN, so need calling 2 apis for base/counter then merging
   chartParams = signal<GetChartOptionsParams | undefined>(undefined);
+  chartLoading = signal(true);
+
+  historicalApi = historicalApiCaller();
 
   constructor() {
-    effect(() => {
-      const [start, end] = this.startEndDates();
-      forkJoin(
-        [this.base(), this.counter()].map((code) =>
-          this.apiService.getHistoricalRates(code, start, end)
-        )
-      )
-        .pipe(map(mergeRateResponse))
-        .subscribe((params) => {
+    effect(
+      () => {
+        const [start, end] = this.startEndDates();
+        this.chartLoading.set(true);
+        // forkJoin waits for completion of all observables so no need unsubscribe
+        this.historicalApi(this.counter(), start, end).subscribe((params) => {
           this.chartParams.set(params);
+          this.chartLoading.set(false);
         });
-    });
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   dayFilterChanged(event: CustomEvent) {
@@ -112,17 +125,4 @@ export class ChartPage {
       ]);
     }
   }
-}
-
-function mergeRateResponse([
-  baseRes,
-  counterRes,
-]: NbpHistoricalRates[]): GetChartOptionsParams {
-  return {
-    counter: counterRes.code,
-    rates: baseRes.rates.map((r, index) => [
-      new Date(r.effectiveDate).getTime(),
-      roundNumber(r.mid / counterRes.rates[index].mid),
-    ]),
-  };
 }

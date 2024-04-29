@@ -4,5 +4,9 @@
 }
 
 h2 {
-  @apply text-sm uppercase ml-4;
+  @apply text-sm uppercase tracking-wide text-ion-text-color-step-200;
+}
+
+.header-button {
+  @apply text-sm font-medium active:text-ion-color-primary;
 }

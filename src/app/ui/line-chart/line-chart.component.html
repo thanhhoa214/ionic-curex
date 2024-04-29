@@ -1,8 +1,14 @@
-@if (chartOptions(); as chartOptions) {
+@if (loading()) {
+<div class="max-w-xl aspect-video flex flex-col justify-center items-center">
+  <ion-spinner name="crescent" />
+  <p>Loading chart...</p>
+</div>
+} @else { @if (chartOptions(); as chartOptions) {
 <highcharts-chart
+  #chart
   [Highcharts]="Highcharts"
   constructorType="stockChart"
   [options]="chartOptions"
   class="block max-w-xl -ml-2"
 />
-}
+} }

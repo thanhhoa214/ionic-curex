@@ -11,7 +11,11 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-line-chart [params]="chartParams()" class="block max-w-xl" />
+  <app-line-chart
+    [params]="chartParams()"
+    [loading]="chartLoading()"
+    class="block max-w-xl"
+  />
 
   <ion-segment
     #dayFilter
@@ -68,6 +72,7 @@
       presentation="date"
       id="end-date"
       [showDefaultButtons]="true"
+      [min]="startEndDates()[0]"
       [max]="tomorrow"
       (ionChange)="setCustomDate('end', $event.detail.value)"
     />

@@ -27,9 +27,9 @@ export class ExchangeRateApiService {
   /**
    * ref: https://api.nbp.pl/en.html
    */
-  getHistoricalRates(base: string, from: string, to: string) {
+  getHistoricalRates(base: string, from: string, to: string, table = 'A') {
     return this.http.get<NbpHistoricalRates>(
-      `${NBP_API_URL}/A/${base}/${from}/${to}?format=json`
+      `${NBP_API_URL}/${table}/${base}/${from}/${to}?format=json`
     );
   }
 }

@@ -1,3 +1,13 @@
 :host {
   display: block;
 }
+
+:host ::ng-deep {
+  .highcharts-label text {
+    @apply fill-ion-text-color-step-100 #{!important};
+  }
+
+  .highcharts-text-outline {
+    @apply stroke-none;
+  }
+}

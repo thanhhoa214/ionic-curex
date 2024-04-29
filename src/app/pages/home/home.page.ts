@@ -14,7 +14,6 @@ import {
   IonItem,
   IonList,
   IonModal,
-  AlertOptions,
   IonText,
   IonItemSliding,
   IonItemOptions,
@@ -32,7 +31,7 @@ import {
   refreshOutline,
   trashOutline,
 } from 'ionicons/icons';
-import { filter } from 'rxjs';
+import { filter, interval, map, startWith } from 'rxjs';
 import {
   AddFavorite,
   RemoveFavorite,
@@ -41,6 +40,11 @@ import {
 import { CoreState } from 'src/app/data-access/store/core.state';
 import { CurrencyListSheetComponent } from '../../ui/currency-list-sheet/currency-list-sheet.component';
 import { CurrencyDetailSheetComponent } from '../../ui/currency-detail-sheet/currency-detail-sheet.component';
+import { RateState } from 'src/app/data-access/store/rate/rate.state';
+import { formatDate } from 'date-fns/format';
+import { nonNullable } from 'src/app/util/helpers/non-nullable';
+import { REFRESH_TIME_SEC } from 'src/app/util/constants';
+import { AsyncPipe, DecimalPipe, NgClass } from '@angular/common';
 
 const CURRENCY_LIMIT = 10;
 
@@ -70,6 +74,9 @@ const CURRENCY_LIMIT = 10;
     IonSelectOption,
     CurrencyListSheetComponent,
     CurrencyDetailSheetComponent,
+    AsyncPipe,
+    DecimalPipe,
+    NgClass,
   ],
 })
 export class HomePage {
@@ -81,11 +88,20 @@ export class HomePage {
       .select(CoreState.codes)
       .pipe(filter((_, index) => index < CURRENCY_LIMIT))
   );
-  codesWithRate = toSignal(this.store.select(CoreState.codesWithRate));
-  favorites = toSignal(this.store.select(CoreState.favorites));
+  favorites = toSignal(this.store.select(RateState.favoritesWithRate));
+  codesWithRate = toSignal(this.store.select(RateState.codesWithRate));
+  ystChangeRate = toSignal(this.store.select(RateState.ystChangeRate));
   selectedCode = signal<string | null>(null);
   showAddFavoriteSheet = signal(false);
   inEditFavorites = signal(false);
+  lastUpdateAt$ = this.store.select(RateState.lastUpdateAt).pipe(
+    filter(nonNullable),
+    map((d) => formatDate(d, 'yyyy-MM-dd HH:mm:ss'))
+  );
+  refreshCountdown$ = interval(1000).pipe(
+    map((i) => REFRESH_TIME_SEC - (i % 60)),
+    startWith(REFRESH_TIME_SEC)
+  );
 
   private tempOrder: string[] = [];
 
@@ -121,6 +137,8 @@ export class HomePage {
   toggleEdit() {
     if (this.inEditFavorites()) {
       this.store.dispatch(new ReorderFavorites(this.tempOrder));
+    } else {
+      this.tempOrder = this.favorites()?.map((f) => f.code) || [];
     }
     this.inEditFavorites.set(!this.inEditFavorites());
   }

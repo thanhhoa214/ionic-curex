@@ -24,6 +24,7 @@ import {
   XE_API_URL,
   xeAuthInterceptor,
 } from './app/data-access/services/xe-auth.interceptor';
+import { RateState } from './app/data-access/store/rate/rate.state';
 
 if (environment.production) {
   enableProdMode();
@@ -37,8 +38,8 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptors([xeAuthInterceptor])),
     importProvidersFrom(IonicStorageModule.forRoot()),
     importProvidersFrom([
-      NgxsModule.forRoot([CoreState]),
-      NgxsStoragePluginModule.forRoot({ key: [CoreState] }),
+      NgxsModule.forRoot([CoreState, RateState]),
+      NgxsStoragePluginModule.forRoot({ key: [CoreState, RateState] }),
       NgxsLoggerPluginModule.forRoot(),
     ]),
     importProvidersFrom(ApiModule.forRoot({ rootUrl: XE_API_URL })),

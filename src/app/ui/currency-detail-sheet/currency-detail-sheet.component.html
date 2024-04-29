@@ -1,16 +1,72 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header [translucent]="true">
+  <ion-toolbar class="!pt-4">
     <ion-title>
-      <strong class="text-sm">{{ base() }}/{{ code()?.iso }}</strong>
-      <p class="text-xs leading-3 font-normal">{{ code()?.currency_name }}</p>
+      <h2 class="font-bold">{{ base() }}/{{ code()?.iso }}</h2>
+      <p class="text-sm">{{ code()?.currency_name }}</p>
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="toggleFavorite()">
-        <ion-icon
-          [name]="isInFavorite() ? 'star' : 'star-outline'"
-          slot="icon-only"
-        ></ion-icon>
-      </ion-button>
-    </ion-buttons>
+
+    <ion-button
+      fill="clear"
+      color="warning"
+      slot="end"
+      (click)="toggleFavorite()"
+    >
+      <ion-icon
+        [name]="isInFavorite() ? 'star' : 'star-outline'"
+        slot="icon-only"
+      ></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
+
+<ion-content [fullscreen]="true">
+  <header class="relative text-center p-6 pt-2">
+    @if (counterRate(); as ystChange) {
+    <strong class="text-4xl">{{ ystChange.rate | number : "1.2-6" }}</strong>
+    <p
+      class="font-semibold {{
+        ystChange.changePercentage === 0
+          ? 'text-gray-600'
+          : ystChange.changePercentage > 0
+          ? 'text-green-600'
+          : 'text-red-600'
+      }}"
+    >
+      {{ ystChange.changePercentage * 100 | number : "1.2-2" }}% from yesterday
+    </p>
+    }
+  </header>
+
+  <main>
+    <app-line-chart [loading]="chartLoading()" [params]="chartParams()" />
+
+    <h3>Recommendations</h3>
+    <div class="w-full overflow-auto no-scrollbar">
+      <section class="flex gap-2 px-4 flex-nowrap">
+        <!-- Carousel of ion-card for similar pairs -->
+        @for (item of recommendations; track item) {
+        <div class="border border-slate-300 rounded-lg py-2 px-4 font-semibold">
+          {{ item }}
+        </div>
+        }
+      </section>
+    </div>
+
+    <section>
+      <h3>Recent News</h3>
+
+      @for (item of recentNews; track item.title) {
+      <ion-card (click)="openBrowser(item.url)">
+        <ion-card-header>
+          <ion-card-title class="text-xl">{{ item.title }}</ion-card-title>
+          <ion-card-subtitle
+            >{{ item.source }} | {{ item.date }}</ion-card-subtitle
+          >
+        </ion-card-header>
+
+        <ion-card-content>{{ item.description }}</ion-card-content>
+      </ion-card>
+      }
+    </section>
+  </main>
+</ion-content>

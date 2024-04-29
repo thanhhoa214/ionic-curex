@@ -3,31 +3,24 @@ import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import {
   AddFavorite,
   FetchCodes,
-  FetchRates,
   RemoveFavorite,
   ReorderFavorites,
   ResetState,
   SetBaseCurrency,
 } from './core.actions';
-import { ExchangeRateApiService } from '../services/exrate-api.service';
 import { tap } from 'rxjs';
-import {
-  CurrencyInformationService,
-  MidMarketRatesService,
-} from '../generated/services';
-import { CurrencyInfoResponse, Rate } from '../generated/models';
+import { CurrencyInformationService } from '../generated/services';
+import { CurrencyInfoResponse } from '../generated/models';
 
 export interface CoreStateModel {
   base: string;
   codes: CurrencyInfoResponse['currencies'] | null;
-  rates: Rate[] | null;
   favorites: string[];
 }
 
 const initState: CoreStateModel = {
   base: 'USD',
   codes: null,
-  rates: null,
   favorites: [],
 };
 
@@ -38,7 +31,6 @@ const initState: CoreStateModel = {
 @Injectable()
 export class CoreState implements NgxsOnInit {
   private xeCurrencyApi = inject(CurrencyInformationService);
-  private xeMideMarketRateApi = inject(MidMarketRatesService);
 
   ngxsOnInit(ctx: StateContext<CoreStateModel>): void {
     if (ctx.getState().codes === null) ctx.dispatch(new FetchCodes());
@@ -47,46 +39,17 @@ export class CoreState implements NgxsOnInit {
   @Selector() static codes(state: CoreStateModel) {
     return state.codes;
   }
-  @Selector() static codesWithRate(state: CoreStateModel) {
-    return state.codes?.map((code) => {
-      const rate = state.rates?.find((r) => r.quotecurrency === code.iso)?.mid;
-      return {
-        code: code.iso,
-        name: code.currency_name,
-        rate: rate ? Math.round((1 / rate) * 1000000) / 1000000 : 0,
-      };
-    });
-  }
-  @Selector() static favorites(state: CoreStateModel) {
-    return state.favorites
-      .map((f) => this.codesWithRate(state)?.find((c) => c.code === f))
-      .filter((predicate) => predicate !== undefined) as {
-      code: string;
-      name: string;
-      rate: number;
-    }[];
-  }
   @Selector() static base(state: CoreStateModel) {
     return state.base;
+  }
+  @Selector() static favorites(state: CoreStateModel) {
+    return state.favorites;
   }
 
   @Action(FetchCodes) fetchCodes({ patchState }: StateContext<CoreStateModel>) {
     return this.xeCurrencyApi
       .v1CurrenciesGet()
       .pipe(tap((response) => patchState({ codes: response.currencies })));
-  }
-
-  @Action(FetchRates) fetchRates({
-    getState,
-    patchState,
-  }: StateContext<CoreStateModel>) {
-    const state = getState();
-    return this.xeMideMarketRateApi
-      .v1ConvertFromGet({
-        from: state.base,
-        to: state.codes?.map((code) => code.iso).join(',') ?? '',
-      })
-      .pipe(tap((response) => patchState({ rates: response.to })));
   }
 
   @Action(AddFavorite) addFavorite(

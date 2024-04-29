@@ -1,4 +1,5 @@
-import { NbpHistoricalRates } from 'src/app/data-access/models/nbp-historical-rates.model';
+import { format } from 'date-fns/format';
+import type { Options } from 'highcharts';
 
 const HOUR_MIN_RANGE = 1,
   MINUTES_MIN_RANGE = 60,
@@ -49,7 +50,7 @@ export interface GetChartOptionsParams {
 export function getChartOptions({
   counter,
   rates,
-}: GetChartOptionsParams): Highcharts.Options {
+}: GetChartOptionsParams): Options {
   const values = rates;
 
   return {
@@ -81,7 +82,8 @@ export function getChartOptions({
     ],
     xAxis: {
       labels: {
-        style: { fontSize: '11px', color: 'var(--ion-text-color-step-300)' },
+        style: { fontSize: '10px', color: 'var(--ion-color-dark-tint)' },
+        formatter: ({ value }) => `${format(value, 'dd/MM')}`,
       },
       minRange: HOUR_MIN_RANGE * MINUTES_MIN_RANGE * SECOND_MIN_RANGE * 1000,
       min: values[0][0],
@@ -95,10 +97,10 @@ export function getChartOptions({
         align: 'left',
         overflow: 'allow',
         x: 20,
-        style: { fontSize: '11px', color: 'var(--ion-text-color-step-300)' },
+        style: { fontSize: '11px', color: 'var(--ion-color-dark-tint)' },
         formatter: ({ value }) => `${value}`,
       },
-      gridLineColor: 'var(--ion-text-color-step-800)',
+      gridLineColor: 'var(--ion-color-light-shade)',
       gridLineDashStyle: 'Solid',
       gridLineWidth: 0.7,
       min: (() => {
@@ -188,7 +190,6 @@ function insertDataLabels(
       x: numbers[element][0],
       dataLabels: {
         enabled: true,
-        color: 'var(--ion-text-color-step-300)',
         animation: { defer: 1000 },
         y: isHigh ? 0 : 24,
         x: isHigh ? 0 : 24,

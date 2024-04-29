@@ -10,6 +10,14 @@ module.exports = {
         "ion-text-color": "var(--ion-text-color)",
         "ion-text-color-rgb": "var(--ion-text-color-rgb)",
 
+        "ion-color-primary": "var(--ion-color-primary)",
+        "ion-color-primary-rgb": "var(--ion-color-primary-rgb)",
+        "ion-color-primary-contrast": "var(--ion-color-primary-contrast)",
+        "ion-color-primary-contrast-rgb":
+          "var(--ion-color-primary-contrast-rgb)",
+        "ion-color-primary-shade": "var(--ion-color-primary-shade)",
+        "ion-color-primary-tint": "var(--ion-color-primary-tint)",
+
         "ion-text-color-step-50": "var(--ion-text-color-step-50)",
         "ion-text-color-step-100": "var(--ion-text-color-step-100)",
         "ion-text-color-step-150": "var(--ion-text-color-step-150)",
