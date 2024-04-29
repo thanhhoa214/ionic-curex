@@ -32,6 +32,33 @@ https://github.com/thanhhoa214/ionic-curex/assets/32329202/057b88e8-0f83-422a-a4
 
 - iOS Widget for favorite currencies
 
+## Project Structure
+
+Architecture strategy [Module as library](https://nx.dev/structure/library-types#library-types) to get these advantages:
+
+- Clear documentation folders and their purposes
+- Inherit effective module-based architecture from Angular official recommendation
+- Separate concerns between kinds of things, reduces dependent relations between modules
+- Prevents heavy-based on old shared module strategy
+- Prevents from uncountable meaningless folder
+- Prevents too much-nested component
+- Enhance awareness and scalability
+
+```
+📦  root
+ ┣ 📃 demo.mp4 - Demo file
+ ┣ 📃 angular.json - Configurations for Angular project
+ ┣ 📃 capacitor.config.ts - Configurations for capacitor
+ ┣ 📂 android - Android native project
+ ┣ 📂 ios - iOS native project
+ ┣ 📂 src
+ ┃ ┣ 📂 app - Contains the main web/hybrid codebase. If more features, the 4 types of folders below will be repeatable for each "big feature".
+ ┃ ┃ ┣ 📂 data-access - Data acccess things such as store, API services, API models, OpenAPI generated folder
+ ┃ ┃ ┣ 📂 pages - components as pages
+ ┃ ┃ ┣ 📂 ui - shared components or just section components
+ ┃ ┃ ┣ 📂 util - shared things like constants, utility functions, helpers to keep the main logic stay inside components
+```
+
 ## Techniques Used
 
 - Angular: The application is built with Angular, a platform for building web applications.
