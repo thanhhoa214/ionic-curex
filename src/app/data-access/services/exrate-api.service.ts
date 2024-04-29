@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { SupportedCodesResponse } from '../models/supported-codes.model';
 import { ConversionRates } from '../models/conversion-rates.model';
 import { NbpHistoricalRates } from '../models/nbp-historical-rates.model';
 
@@ -12,15 +11,9 @@ const NBP_API_URL = 'http://api.nbp.pl/api/exchangerates/rates';
 export class ExchangeRateApiService {
   private http = inject(HttpClient);
 
-  getAllSupportedCodes() {
-    return this.http.get<SupportedCodesResponse>(
-      `${EXCHANGE_API_URL}/${EXCHANGE_API_KEY}/codes`
-    );
-  }
-
-  getRates(counter: string) {
+  getRates(base: string) {
     return this.http.get<ConversionRates>(
-      `${EXCHANGE_API_URL}/${EXCHANGE_API_KEY}/latest/${counter}`
+      `${EXCHANGE_API_URL}/${EXCHANGE_API_KEY}/latest/${base}`
     );
   }
 

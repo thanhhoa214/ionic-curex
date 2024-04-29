@@ -40,7 +40,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom([
       NgxsModule.forRoot([CoreState, RateState]),
       NgxsStoragePluginModule.forRoot({ key: [CoreState, RateState] }),
-      NgxsLoggerPluginModule.forRoot(),
+      NgxsLoggerPluginModule.forRoot({ disabled: environment.production }),
     ]),
     importProvidersFrom(ApiModule.forRoot({ rootUrl: XE_API_URL })),
   ],

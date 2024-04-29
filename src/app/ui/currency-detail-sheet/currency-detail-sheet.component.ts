@@ -4,6 +4,7 @@ import {
   effect,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -23,8 +24,8 @@ import {
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { addIcons } from 'ionicons';
-import { star, starOutline } from 'ionicons/icons';
-import { filter, map, switchMap } from 'rxjs';
+import { expandOutline, star, starOutline } from 'ionicons/icons';
+import { filter, switchMap } from 'rxjs';
 import {
   AddFavorite,
   CoreState,
@@ -38,34 +39,8 @@ import { GetChartOptionsParams } from 'src/app/util/helpers/highchart-options-bu
 import { subDays } from 'date-fns/subDays';
 import { globalFormatDate } from 'src/app/util/helpers/global-format-date';
 import { historicalApiCaller } from 'src/app/util/helpers/historical-api-caller';
-import { Browser } from '@capacitor/browser';
-
-const recentNews = [
-  {
-    title: 'Tech stocks rally as major companies report strong earnings',
-    date: '2021-05-14',
-    source: 'CNN Business',
-    url: 'https://www.cnn.com/2021/05/14/business/tech-stocks-rally-earnings/index.html',
-    description:
-      'Technology stocks surged on Friday as major companies reported better-than-expected earnings, boosting investor confidence in the sector amid a broader market rally.',
-  },
-  {
-    title: 'Oil prices jump as OPEC+ sticks to gradual output increases',
-    date: '2021-05-13',
-    source: 'Bloomberg',
-    url: 'https://www.bloomberg.com/news/articles/2021-05-13/oil-jumps-as-opec-sticks-to-gradual-output-increases',
-    description:
-      'Oil prices soared on Thursday after the Organization of the Petroleum Exporting Countries and allies (OPEC+) decided to stick to their plan of gradual output increases, easing concerns about supply shortages.',
-  },
-  {
-    title: 'Global stock markets hit new highs on positive economic outlook',
-    date: '2021-05-12',
-    source: 'Financial Times',
-    url: 'https://www.ft.com/content/91a55fe3-5aa6-4e71-bdb2-0a9c64a32d17',
-    description:
-      'Global stock markets reached new highs on Wednesday amid growing optimism about the global economic recovery, fueled by strong corporate earnings and progress in vaccination efforts against COVID-19.',
-  },
-];
+import { RouterLink } from '@angular/router';
+import { CurrencyAdditionalInfoComponent } from '../currency-additional-info/currency-additional-info.component';
 
 @Component({
   selector: 'app-currency-detail-sheet',
@@ -87,6 +62,8 @@ const recentNews = [
     IonTitle,
     LineChartComponent,
     DecimalPipe,
+    RouterLink,
+    CurrencyAdditionalInfoComponent,
   ],
 })
 export class CurrencyDetailSheetComponent {
@@ -94,7 +71,10 @@ export class CurrencyDetailSheetComponent {
   private codes = toSignal(this.store.select(CoreState.codes));
   private favorites = toSignal(this.store.select(RateState.favoritesWithRate));
   private historicalApi = historicalApiCaller();
+
   counter = input<string>('USD');
+  expand = output();
+
   base = toSignal(this.store.select(CoreState.base));
 
   counterRate = toSignal(
@@ -111,11 +91,8 @@ export class CurrencyDetailSheetComponent {
   chartParams = signal<GetChartOptionsParams | undefined>(undefined);
   chartLoading = signal(true);
 
-  recommendations = ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF'];
-  recentNews = recentNews;
-
   constructor() {
-    addIcons({ star, starOutline });
+    addIcons({ star, starOutline, expandOutline });
     effect(
       () => {
         const today = new Date();
@@ -139,9 +116,5 @@ export class CurrencyDetailSheetComponent {
     } else {
       this.store.dispatch(new AddFavorite(this.counter()));
     }
-  }
-
-  openBrowser(url: string) {
-    Browser.open({ url: 'http://capacitorjs.com/' });
   }
 }

@@ -1,13 +1,41 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title> Tab 3 </ion-title>
+    <ion-title> Conversion Tool </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="p-4">
+    <div class="flex items-center gap-2">
+      <ion-select #fromSelect [(ngModel)]="from" aria-label="From" hidden>
+        @for (currency of codesWithRate(); track currency.code) {
+        <ion-select-option [value]="currency.code">
+          {{ currency.name }}
+        </ion-select-option>
+        }
+      </ion-select>
+      <ion-button color="light" (click)="fromSelect.open()"
+        >{{from()}}</ion-button
+      >
+      <ion-input fill="solid" type="number" [(ngModel)]="fromAmount" />
+    </div>
+    <p class="text-right"><strong>equals to</strong></p>
+    <div class="flex items-center gap-2">
+      <ion-select [(ngModel)]="to" aria-label="To" hidden>
+        @for (currency of codesWithRate(); track currency.code) {
+        <ion-select-option [value]="currency.code">
+          {{ currency.name }}
+        </ion-select-option>
+        }
+      </ion-select>
+      <ion-button color="light">{{to()}}</ion-button>
+      <ion-input
+        readonly="true"
+        fill="solid"
+        [value]="toAmount() | number: '.2-8'"
+      />
+    </div>
+
+    <ion-button class="w-full mt-4">Convert</ion-button>
+  </div>
 </ion-content>

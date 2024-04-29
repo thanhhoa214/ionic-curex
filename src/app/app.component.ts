@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { interval, startWith } from 'rxjs';
-import { FetchCodes, ResetState } from './data-access/store/core.actions';
 import {
   FetchRates,
   FetchYesterdayRates,
@@ -19,11 +18,11 @@ export class AppComponent implements OnInit {
   private store = inject(Store);
 
   ngOnInit(): void {
-    // this.store.dispatch(new FetchYesterdayRates());
+    this.store.dispatch(new FetchYesterdayRates());
     interval(REFRESH_TIME_SEC * 1000)
       .pipe(startWith(0))
       .subscribe((i) => {
-        // this.store.dispatch(new FetchRates());
+        this.store.dispatch(new FetchRates());
       });
   }
 }

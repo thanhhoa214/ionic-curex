@@ -1,0 +1,26 @@
+<h3>Recommendations</h3>
+<div class="w-full overflow-auto no-scrollbar">
+  <section class="flex gap-2 px-4 flex-nowrap">
+    <!-- Carousel of ion-card for similar pairs -->
+    @for (item of recommendations; track item) {
+    <div class="border border-slate-300 rounded-lg py-2 px-4 font-semibold">
+      {{ item }}
+    </div>
+    }
+  </section>
+</div>
+
+<section>
+  <h3>Recent News</h3>
+
+  @for (item of recentNews; track item.title) {
+  <ion-card (click)="openBrowser(item.url)">
+    <ion-card-header>
+      <ion-card-title class="text-xl">{{ item.title }}</ion-card-title>
+      <ion-card-subtitle>{{ item.source }} | {{ item.date }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>{{ item.description }}</ion-card-content>
+  </ion-card>
+  }
+</section>

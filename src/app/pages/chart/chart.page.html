@@ -1,15 +1,53 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>{{base()}}/{{counter()}}</ion-title>
+  <ion-toolbar class="pb-2">
+    <ion-title>
+      <h2 class="font-bold text-sm">{{ base() }}/{{ code()?.iso }}</h2>
+      <p class="text-xs font-normal">{{ code()?.currency_name }}</p>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">{{base()}}/{{counter()}}</ion-title>
+      <ion-title size="large">
+        <h2 class="font-bold">{{ base() }}/{{ code()?.iso }}</h2>
+        <p class="text-sm font-normal">
+          {{ code()?.currency_name }}
+        </p></ion-title
+      >
+      <ion-button
+        fill="clear"
+        color="warning"
+        slot="end"
+        (click)="toggleFavorite()"
+        class="mr-2"
+      >
+        <ion-icon
+          [name]="isInFavorite() ? 'star' : 'star-outline'"
+          size="large"
+          slot="icon-only"
+        ></ion-icon>
+      </ion-button>
     </ion-toolbar>
   </ion-header>
+
+  <header class="relative pt-2 px-4 mb-8">
+    @if (counterRate(); as ystChange) {
+    <strong class="text-4xl">{{ ystChange.rate | number : "1.2-6" }}</strong>
+    <span
+      class="font-semibold {{
+        ystChange.changePercentage === 0
+          ? 'text-gray-600'
+          : ystChange.changePercentage > 0
+          ? 'text-green-600'
+          : 'text-red-600'
+      }}"
+    >
+      ({{ ystChange.changePercentage * 100 | number : "1.2-2" }}%)
+    </span>
+    }
+  </header>
 
   <app-line-chart
     [params]="chartParams()"
@@ -44,6 +82,8 @@
     <ion-datetime-button datetime="end-date" />
   </div>
   }
+
+  <app-currency-additional-info class="block pb-16" />
 </ion-content>
 
 <ion-modal

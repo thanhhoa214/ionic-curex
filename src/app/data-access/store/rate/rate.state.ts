@@ -15,6 +15,7 @@ import { CoreState, CoreStateModel } from '../core.state';
 import { subDays } from 'date-fns/subDays';
 import { startOfDay } from 'date-fns/startOfDay';
 import { nonNullable } from 'src/app/util/helpers/non-nullable';
+import { ExchangeRateApiService } from '../../services/exrate-api.service';
 
 export interface RateStateModel {
   rates: Rate[] | null;
@@ -39,6 +40,7 @@ const initState: RateStateModel = {
 @Injectable()
 export class RateState {
   private store = inject(Store);
+  private exchangeApi = inject(ExchangeRateApiService);
   private xeMidMarketRateApi = inject(MidMarketRatesService);
 
   @Selector() static rates(state: RateStateModel) {
@@ -106,20 +108,16 @@ export class RateState {
   }
 
   @Action(FetchRates) fetchRates({ patchState }: StateContext<RateStateModel>) {
-    const { codes, base } = this.store.selectSnapshot(
-      CoreState
-    ) as CoreStateModel;
+    const { base } = this.store.selectSnapshot(CoreState) as CoreStateModel;
 
-    return this.xeMidMarketRateApi
-      .v1ConvertFromGet({
-        from: base,
-        to: codes?.map((code) => code.iso).join(',') ?? '',
+    return this.exchangeApi.getRates(base).pipe(
+      tap((response) => {
+        const rates = Object.entries(response.conversion_rates).map(
+          ([code, value]) => ({ mid: value, quotecurrency: code })
+        );
+        patchState({ rates, lastUpdateAt: Date.now() });
       })
-      .pipe(
-        tap((response) =>
-          patchState({ rates: response.to, lastUpdateAt: Date.now() })
-        )
-      );
+    );
   }
 
   @Action(FetchYesterdayRates) fetchYesterdayRates({
@@ -131,16 +129,13 @@ export class RateState {
     ) as CoreStateModel;
     const yesterday = startOfDay(subDays(new Date(), 1)).toISOString();
     const { historical } = getState();
-    return this.xeMidMarketRateApi
-      .v1HistoricRateGet({
-        from: base,
-        to: codes?.map((code) => code.iso).join(',') ?? '',
-        date: yesterday,
+    return this.exchangeApi.getRatesYesterday(base).pipe(
+      tap((response) => {
+        const rates = Object.entries(response.conversion_rates).map(
+          ([code, value]) => ({ mid: value, quotecurrency: code })
+        );
+        patchState({ historical: { ...historical, yesterday: rates } });
       })
-      .pipe(
-        tap((response) =>
-          patchState({ historical: { ...historical, yesterday: response.to } })
-        )
-      );
+    );
   }
 }

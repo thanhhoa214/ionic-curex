@@ -122,14 +122,18 @@
 </ion-modal>
 
 <ion-modal
+  #detailModal
   [isOpen]="!!selectedCode()"
   [initialBreakpoint]="0.75"
   [breakpoints]="[0, 0.75, 1]"
   (ionModalDidDismiss)="selectedCode.set(null)"
 >
   <ng-template>
-    @if (selectedCode(); as selectedCode) {
-    <app-currency-detail-sheet [counter]="selectedCode" />
+    @if (selectedCode(); as selectedCodeVar) {
+    <app-currency-detail-sheet
+      [counter]="selectedCodeVar"
+      (expand)="detailModal.dismiss()"
+    />
     }
   </ng-template>
 </ion-modal>

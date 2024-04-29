@@ -1,7 +1,6 @@
 import {
   Component,
-  OnInit,
-  Signal,
+  computed,
   effect,
   inject,
   input,
@@ -22,27 +21,29 @@ import {
   IonButton,
   DatetimeChangeEventDetail,
   IonFooter,
+  IonIcon,
+  IonButtons,
 } from '@ionic/angular/standalone';
-import {
-  catchError,
-  combineLatest,
-  filter,
-  forkJoin,
-  map,
-  switchMap,
-} from 'rxjs';
-import { ExchangeRateApiService } from 'src/app/data-access/services/exrate-api.service';
+import { filter, switchMap } from 'rxjs';
 import { GetChartOptionsParams } from 'src/app/util/helpers/highchart-options-builder';
 import { Store } from '@ngxs/store';
-import { CoreState } from 'src/app/data-access/store';
-import { NbpHistoricalRates } from 'src/app/data-access/models/nbp-historical-rates.model';
-import { roundNumber } from 'src/app/util/helpers/format-number';
+import {
+  AddFavorite,
+  CoreState,
+  RemoveFavorite,
+} from 'src/app/data-access/store';
 import { FormsModule } from '@angular/forms';
 import { LineChartComponent } from '../../ui/line-chart/line-chart.component';
 import { addDays } from 'date-fns/addDays';
 import { subDays } from 'date-fns/subDays';
 import { globalFormatDate } from 'src/app/util/helpers/global-format-date';
 import { historicalApiCaller } from 'src/app/util/helpers/historical-api-caller';
+import { nonNullable } from 'src/app/util/helpers/non-nullable';
+import { RateState } from 'src/app/data-access/store/rate/rate.state';
+import { DecimalPipe } from '@angular/common';
+import { CurrencyAdditionalInfoComponent } from '../../ui/currency-additional-info/currency-additional-info.component';
+import { addIcons } from 'ionicons';
+import { star, starOutline } from 'ionicons/icons';
 
 const today = new Date();
 @Component({
@@ -51,6 +52,8 @@ const today = new Date();
   styleUrls: ['chart.page.scss'],
   standalone: true,
   imports: [
+    IonButtons,
+    IonIcon,
     IonFooter,
     IonButton,
     IonDatetime,
@@ -65,16 +68,28 @@ const today = new Date();
     IonContent,
     FormsModule,
     LineChartComponent,
+    DecimalPipe,
+    CurrencyAdditionalInfoComponent,
   ],
 })
 export class ChartPage {
-  private apiService = inject(ExchangeRateApiService);
-
-  base = toSignal(inject(Store).select(CoreState.base), {
-    initialValue: 'USD',
-  });
+  private store = inject(Store);
+  private codes = toSignal(this.store.select(CoreState.codes));
+  private favorites = toSignal(this.store.select(RateState.favoritesWithRate));
+  base = toSignal(this.store.select(CoreState.base), { initialValue: 'USD' });
   // withComponentInputBinding binds router param to input property directly
   counter = input('counter');
+
+  code = computed(() => this.codes()?.find((c) => c.iso === this.counter()));
+  counterRate = toSignal(
+    toObservable(this.counter).pipe(
+      filter(nonNullable),
+      switchMap((c) => this.store.select(RateState.ystRateOf(c)))
+    )
+  );
+  isInFavorite = computed(() =>
+    this.favorites()?.some((f) => f.code === this.counter())
+  );
 
   tomorrow = addDays(today, 1);
   startEndDates = signal([
@@ -89,6 +104,7 @@ export class ChartPage {
   historicalApi = historicalApiCaller();
 
   constructor() {
+    addIcons({ star, starOutline });
     effect(
       () => {
         const [start, end] = this.startEndDates();
@@ -123,6 +139,13 @@ export class ChartPage {
         type === 'start' ? date : this.startEndDates()[0],
         type === 'end' ? date : this.startEndDates()[1],
       ]);
+    }
+  }
+  toggleFavorite() {
+    if (this.isInFavorite()) {
+      this.store.dispatch(new RemoveFavorite(this.counter()));
+    } else {
+      this.store.dispatch(new AddFavorite(this.counter()));
     }
   }
 }
