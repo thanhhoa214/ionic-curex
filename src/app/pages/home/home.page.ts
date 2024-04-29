@@ -32,7 +32,7 @@ import {
   refreshOutline,
   trashOutline,
 } from 'ionicons/icons';
-import { filter, interval, map, startWith } from 'rxjs';
+import { combineLatest, filter, interval, map, startWith } from 'rxjs';
 import {
   AddFavorite,
   RemoveFavorite,
@@ -83,9 +83,14 @@ export class HomePage {
   readonly CURRENCY_LIMIT = 10;
   private store = inject(Store);
 
-  base = toSignal(this.store.select(CoreState.base));
+  base$ = this.store.select(CoreState.base);
+  base = toSignal(this.base$);
   favorites = toSignal(this.store.select(RateState.favoritesWithRate));
-  codesWithRate = toSignal(this.store.select(RateState.rates));
+  codesWithRate = toSignal(
+    combineLatest([this.base$, this.store.select(RateState.rates)]).pipe(
+      map(([base, rates]) => rates?.filter((r) => r.code !== base))
+    )
+  );
   ystChangeRate = toSignal(this.store.select(RateState.ystChangeRate));
   selectedCode = signal<string | null>(null);
   allCurrencyExpanded = signal(false);

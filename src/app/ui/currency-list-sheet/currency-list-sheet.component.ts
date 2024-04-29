@@ -13,11 +13,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs';
-import {
-  CoreState,
-  AddFavorite,
-  RemoveFavorite,
-} from 'src/app/data-access/store';
+import { AddFavorite, RemoveFavorite } from 'src/app/data-access/store';
 import { RateState } from 'src/app/data-access/store/rate/rate.state';
 @Component({
   selector: 'app-currency-list-sheet',

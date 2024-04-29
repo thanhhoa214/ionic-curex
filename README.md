@@ -1,12 +1,13 @@
 # Currency Exchange
 
-This project is a currency exchange application built with Angular and Ionic. It uses the XE Currency Data API to fetch exchange rates.
+This project is a currency exchange application built with Angular and Ionic. It uses the XE Currency Data API to fetch exchange rates. Targetting FX traders makes me choose Dark theme as a go-to.
 
 ## Features
 
 - Periodically update exchange rates: Fetches exchange rates every 1 minute from API.
+- Quickly check out the 7-day chart by tapping on a currency in style of bottom sheet.
+- Favorite list: add/reorder currency pair and remove items with ease by swiping interaction.
 - Currency conversion: Converts between different currencies using the fetched exchange rates.
-- Favorite list: add/reorder currency pair and remove items with ease by swiping interaction
 
 ## Techniques Used
 

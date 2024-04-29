@@ -7,10 +7,6 @@ h2 {
   @apply text-sm uppercase tracking-wide;
 }
 
-.header-button {
-  @apply text-sm font-medium;
-}
-
 ion-list:first-child ion-item {
   --background: var(--ion-color-primary-tint);
 }

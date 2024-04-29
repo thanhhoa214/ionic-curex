@@ -6,7 +6,7 @@ import {
 } from '../models/nbp-historical-rates.model';
 import { map } from 'rxjs';
 
-const NBP_API_URL = 'http://api.nbp.pl/api/exchangerates';
+const NBP_API_URL = 'https://api.nbp.pl/api/exchangerates';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeRateApiService {

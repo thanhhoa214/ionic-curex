@@ -55,7 +55,7 @@ export class ToolPage {
         const from = this.codesWithRate()?.find((c) => c.code === this.from());
         const to = this.codesWithRate()?.find((c) => c.code === this.to());
         this.toAmount.set(
-          from && to ? (this.fromAmount() * from.mid) / to.mid : 0
+          from && to ? (this.fromAmount() * to.mid) / from.mid : 0
         );
       },
       { allowSignalWrites: true }

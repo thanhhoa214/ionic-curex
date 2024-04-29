@@ -18,8 +18,12 @@
         [value]="item.code"
         [checked]="favorites()?.includes(item.code)"
         (ionChange)="checkboxChange($event.detail)"
-        >{{ item.currency }}</ion-checkbox
       >
+        {{ item.code }}
+        <small class="text-ion-text-color-step-200"
+          >({{ item.currency }})</small
+        >
+      </ion-checkbox>
     </ion-item>
     }
   </ion-list>
