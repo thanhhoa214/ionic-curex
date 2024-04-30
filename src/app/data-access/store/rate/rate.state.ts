@@ -11,7 +11,6 @@ import { FetchRates, FetchYesterdayRates } from './rate.actions';
 import { tap } from 'rxjs';
 import { CoreState, CoreStateModel } from '../core.state';
 import { subDays } from 'date-fns/subDays';
-import { startOfDay } from 'date-fns/startOfDay';
 import { nonNullable } from 'src/app/util/helpers/non-nullable';
 import { ExchangeRateApiService } from '../../services/exrate-api.service';
 import { NbpTableRate } from '../../models/nbp-historical-rates.model';
@@ -115,7 +114,7 @@ export class RateState {
     let minus = 1;
     // If Monday, get Friday's rate
     if (today.getUTCDay() === 1) minus = 3;
-    const dayBefore = globalFormatDate(startOfDay(subDays(today, minus)));
+    const dayBefore = globalFormatDate(subDays(today, minus));
 
     const { historical } = getState();
     return this.exchangeApi
